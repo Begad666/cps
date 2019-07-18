@@ -15,7 +15,6 @@ import net.begad666.bc.plugin.customprotocolsettings.utils.Updates;
 
 public class Main extends Plugin{
 	private static Main instance;
-	@SuppressWarnings("unused")
 	public void onEnable()
    {     
 		instance = this;          

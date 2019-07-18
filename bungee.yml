@@ -1,0 +1,13 @@
+name: CustomProtocolSettings
+version: v1.2
+main: net.begad666.bc.plugin.customprotocolsettings.Main
+author: ShiftCraft
+
+commands:
+cps:
+ description: Main Plugin Command
+ permission: cps.admin
+ usage: |
+  Example: /cps
+  Example: /cps reload
+  Example: /cps loaded

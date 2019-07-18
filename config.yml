@@ -1,0 +1,31 @@
+#Config Version , Don't try to edit or the plugin will not be active
+config-version: 'v1'
+#Protocol name
+protocol-name: 'Network'
+#MOTD
+motd: 
+ 1: '&6Network is &5now open!'
+ 2: '&3Come To &aPlay'
+#Max Players
+max-players: 100
+#Allowed Protocols , check out this link for protocol version numbers wiki.vg/Protocol_version_numbers
+allowed-protocols:
+ - 340
+ - 393
+ - 401
+ - 477
+ - 485
+ - 490
+#Blocked Message
+blocked-message: 'You Are using a version that you can''t play with it here'
+#Enable or disable the update checker
+update-checker-enabled: true
+#Default Protocol , check out this link for protocol version numbers wiki.vg/Protocol_version_numbers
+default-allowed-protocol: 340
+#Hover Message
+hover-message: 
+ - '&6New Server is here!'
+ - '&3COMEEEE'
+#Prefix of Plugin
+prefix: '&7[&3CustomProt&6ocolSettings&7]'
+#for help check out https://github.com/Begad666/cps/wiki/Help

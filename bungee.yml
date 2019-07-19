@@ -1,7 +1,7 @@
 name: CustomProtocolSettings
-version: v1.2
+version: v1.2.1
 main: net.begad666.bc.plugin.customprotocolsettings.Main
-author: ShiftCraft
+author: Begad666
 
 commands:
 cps:

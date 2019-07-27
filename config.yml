@@ -1,5 +1,5 @@
 #Config Version , Don't try to edit or the plugin will not be active
-config-version: 'v1'
+config-version: 'v2'
 #Protocol name
 protocol-name: 'Network'
 #MOTD
@@ -27,5 +27,7 @@ hover-message:
  - '&6New Server is here!'
  - '&3COMEEEE'
 #Prefix of Plugin
-prefix: '&7[&3CustomProt&6ocolSettings&7]'
+plugin_prefix: '&7[&3CustomProt&6ocolSettings&7]'
+#Prefix of the Ping Command
+ping_prefix: '&7[&3Pi&6ng&7]'
 #for help check out https://github.com/Begad666/cps/wiki/Help

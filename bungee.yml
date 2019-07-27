@@ -1,5 +1,5 @@
 name: CustomProtocolSettings
-version: v1.2.3
+version: v1.2.5
 main: net.begad666.bc.plugin.customprotocolsettings.Main
 author: Begad666
 
@@ -11,3 +11,6 @@ cps:
   Example: /cps
   Example: /cps reload
   Example: /cps loaded
+ ping:
+  description: Shows Your Ping
+  permission: cps.ping

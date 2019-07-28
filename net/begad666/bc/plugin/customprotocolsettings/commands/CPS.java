@@ -33,12 +33,12 @@ public class CPS extends Command{
 		    messagefromMessageinfo = "No Updates is Required";
 		    versionforupdating = "";
 		    }
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " ---------------------------------"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Version: " + Updates.getCurrentVersion()));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Updates: " + messagefromMessageinfo + " " + versionforupdating));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Minimum Required version of jre: 1.8.1_191"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " #1417 version of BungeeCord is Minium Required"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " ---------------------------------"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Version: " + Updates.getCurrentVersion()));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Updates: " + messagefromMessageinfo + " " + versionforupdating));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Minimum Required version of jre: 1.8.1_191"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " #1417 version of BungeeCord is Minium Required"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
 		}
 		if (args.length == 1)
 		{
@@ -50,13 +50,6 @@ public class CPS extends Command{
 		{	
         loaded(sender);
 		}
-		if ((args[0].equalsIgnoreCase("renew")))
-		{
-		if (Config.getIsRenewRequired())
-		renew(sender);	
-		else
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " No Renew is required"));
-		}
 		if ((args[0].equalsIgnoreCase("license")))
 		{
 		license(sender);
@@ -66,34 +59,31 @@ public class CPS extends Command{
 	}
   public static void loaded(CommandSender sender)
   {
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " ---------------------------------"));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Here are Loaded Config Values"));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Config Version:" + Config.getconfig().getString("config-version")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Protocol Name:" + Config.getconfig().getString("protocol-name")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Motd: 1." + Config.getconfig().getString("motd.1")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + "       2." + Config.getconfig().getString("motd.2")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Max Players:" + Config.getconfig().getInt("max-players")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Hover Message: " + Processarraylists.processhovermessage()));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Updates: " + Config.getconfig().getBoolean("update-checker-enabled")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Allowed Protocols: " + Processarraylists.processversionforchecking()));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Blocked Message: " + Config.getconfig().getString("blocked-message")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " ---------------------------------"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Here are Loaded Config Values"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Config Version:" + Config.getconfig().getString("config-version")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Protocol Name:" + Config.getconfig().getString("protocol-name")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Motd: 1." + Config.getconfig().getString("motd.1")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + "       2." + Config.getconfig().getString("motd.2")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Max Players:" + Config.getconfig().getInt("max-players")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Hover Message: " + Processarraylists.processhovermessage()));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Updates: " + Config.getconfig().getBoolean("update-checker-enabled")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Default Allowed Protocol: " + Config.getconfig().getInt("default-allowed-protocol")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Allowed Protocols: " + Processarraylists.processversionforchecking()));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Ping Prefix: " + Config.getconfig().getString("ping_prefix")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Blocked Message: " + Config.getconfig().getString("blocked-message")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
   }
   public static void reload(CommandSender sender)
 		  {
 	    Config.check("Reload");
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Config reload process finshed!"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Config reload process finshed!"));
 		sender.sendMessage(new TextComponent(""));
 		loaded(sender);
 		  }
-  public static void renew(CommandSender sender)
-  {
-	  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Checking what is needed to renew..."));
-	  Config.renew(sender, Config.getconfig().getString("config-version"));
-  }
   public static void license(CommandSender sender)
   {
-  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + "\r\nMIT License\r\n" + 
+  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + "\r\nMIT License\r\n" + 
   		"\r\n" + 
   		"Copyright (c) 2019 Begad666\r\n" + 
   		"\r\n" + 

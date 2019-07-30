@@ -17,16 +17,14 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
  - OS: [e.g. Windows]
- - OS Version: [e.g. Windows 10 build 1903]
- - Version [e.g. v1.2]
+ - Java Version: [e.g. 1.8.0_191]
+ - Plugin Version: [e.g. v1.2]
+ - BungeeCord Version: [e.g. #1417]
 
 **Additional context**
 Add any other context about the problem here.

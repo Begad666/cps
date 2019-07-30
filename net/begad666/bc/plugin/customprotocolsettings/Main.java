@@ -102,6 +102,7 @@ public class Main extends Plugin{
 	    {
 	    Updates.setUpdateInfo("true", "", "Updates Are Disabled");
 	    }
+	    CPS.isEnabled = true;
 	    getInstance().getLogger().info(Updates.getCurrentVersion() + " Is now enabled!");
 	   
    }
@@ -116,6 +117,7 @@ public class Main extends Plugin{
 	 getInstance().getLogger().info("Canceling Scheduled Tasks...");
 	 ProxyServer.getInstance().getScheduler().cancel(getInstance());
 	 getInstance().getLogger().info(Updates.getCurrentVersion() + " Is now disabled!");
+	 CPS.isEnabled = false;
    }
 	public static Main getInstance()
    {

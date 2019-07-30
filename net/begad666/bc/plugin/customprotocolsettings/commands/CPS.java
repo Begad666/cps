@@ -4,8 +4,13 @@ package net.begad666.bc.plugin.customprotocolsettings.commands;
 import java.util.ArrayList;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.PluginManager;
+import net.begad666.bc.plugin.customprotocolsettings.Main;
+import net.begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
+import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectBlockedProtocols;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Processarraylists;
 import net.begad666.bc.plugin.customprotocolsettings.utils.ProcessStrings;
@@ -14,6 +19,7 @@ import net.begad666.bc.plugin.customprotocolsettings.utils.Updates;
 public class CPS extends Command{
 	private static String messagefromMessageinfo;
 	private static String versionforupdating;
+	public static boolean isEnabled;
 	
 	public CPS()
 	{
@@ -21,7 +27,7 @@ public class CPS extends Command{
 	}
 	public void execute(CommandSender sender, final String[] args) {
 		if(args.length != 1)
-		{
+		{if (args.length != 2) {
 		    ArrayList<String> list = Updates.getUpdateInfo();
 		    if(list.get(0) == "true") 
 		    {
@@ -40,7 +46,8 @@ public class CPS extends Command{
 			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " #1417 version of BungeeCord is Minium Required"));
 			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
 		}
-		if (args.length == 1)
+		}
+		if (args.length >= 1)
 		{
 		 if ((args[0].equalsIgnoreCase("reload")))
 		{
@@ -54,6 +61,38 @@ public class CPS extends Command{
 		{
 		license(sender);
 		}
+		if ((args[0].equalsIgnoreCase("enable")))
+		{
+		try {
+		if ((args[1].equals(Config.getconfig().getString("password")))) 
+	    {
+		enable(sender);
+		}
+		else
+		{
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Password is wrong , Please Try Again"));
+		}
+		} catch (Exception e)
+		{
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Please type the password"));
+		}
+		}
+		if ((args[0].equalsIgnoreCase("disable")))
+		{
+		try {
+		if ((args[1].equals(Config.getconfig().getString("password")))) 
+	    {
+		disable(sender);
+		}
+		else
+		{
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Password is wrong , Please Try Again"));
+		}
+		}catch (Exception e)
+		{
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Please type the password"));
+		}
+		} 
 
 	  }
 	}
@@ -105,4 +144,38 @@ public class CPS extends Command{
   		"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\r\n" + 
   		"SOFTWARE."));
   }
+  private void enable(CommandSender sender)
+  {
+  if (CPS.isEnabled)
+  {
+	 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Features is already enabled!"));
+  }
+  else
+  {
+	  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Enabling Plugin Features..."));
+	PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
+	pluginManager.registerListener(Main.getInstance(), new ChangePingData());
+	pluginManager.registerListener(Main.getInstance(), new DisconnectBlockedProtocols());
+	pluginManager.registerCommand(Main.getInstance(), new Ping());
+	isEnabled = true;
+	sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Plugin Features Has been Enabled"));
+  }
+  }
+  private void disable(CommandSender sender)
+  {
+	  if (!CPS.isEnabled)
+	  {
+		 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Features is already disabled!"));
+	  }
+	  else
+	  {
+		  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Disabling Plugin Features..."));
+		PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
+        pluginManager.unregisterListeners(Main.getInstance());
+        pluginManager.unregisterCommand(new Ping());
+        isEnabled = false;
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Plugin Features Has been Disabled"));
+	  }
+  }
+  
 }

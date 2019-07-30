@@ -39,12 +39,12 @@ public class CPS extends Command{
 		    messagefromMessageinfo = "No Updates is Required";
 		    versionforupdating = "";
 		    }
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Version: " + Updates.getCurrentVersion()));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Updates: " + messagefromMessageinfo + " " + versionforupdating));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Minimum Required version of jre: 1.8.1_191"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " #1417 version of BungeeCord is Minium Required"));
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ---------------------------------"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Version: " + Updates.getCurrentVersion()));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Updates: " + messagefromMessageinfo + " " + versionforupdating));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Minimum Required version of jre: 1.8.1_191"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " #1417 version of BungeeCord is Minium Required"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ---------------------------------"));
 		}
 		}
 		if (args.length >= 1)
@@ -70,11 +70,11 @@ public class CPS extends Command{
 		}
 		else
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Password is wrong , Please Try Again"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Password is wrong , Please Try Again"));
 		}
 		} catch (Exception e)
 		{
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Please type the password"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 		}
 		}
 		if ((args[0].equalsIgnoreCase("disable")))
@@ -86,11 +86,11 @@ public class CPS extends Command{
 		}
 		else
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Password is wrong , Please Try Again"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Password is wrong , Please Try Again"));
 		}
 		}catch (Exception e)
 		{
-			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Please type the password"));
+			sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 		}
 		} 
 
@@ -98,31 +98,31 @@ public class CPS extends Command{
 	}
   public static void loaded(CommandSender sender)
   {
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Here are Loaded Config Values"));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Config Version:" + Config.getconfig().getString("config-version")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Protocol Name:" + Config.getconfig().getString("protocol-name")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Motd: 1." + Config.getconfig().getString("motd.1")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + "       2." + Config.getconfig().getString("motd.2")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Max Players:" + Config.getconfig().getInt("max-players")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Hover Message: " + Processarraylists.processhovermessage()));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Updates: " + Config.getconfig().getBoolean("update-checker-enabled")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Default Allowed Protocol: " + Config.getconfig().getInt("default-allowed-protocol")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Allowed Protocols: " + Processarraylists.processversionforchecking()));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Ping Prefix: " + Config.getconfig().getString("ping_prefix")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Blocked Message: " + Config.getconfig().getString("blocked-message")));
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " ---------------------------------"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ---------------------------------"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Here are Loaded Config Values"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Config Version:" + Config.getconfig().getString("config-version")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Protocol Name:" + Config.getconfig().getString("protocol-name")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Motd: 1." + Config.getconfig().getString("motd.1")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + "       2." + Config.getconfig().getString("motd.2")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Max Players:" + Config.getconfig().getInt("max-players")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Hover Message: " + Processarraylists.processhovermessage()));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Updates: " + Config.getconfig().getBoolean("update-checker-enabled")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Default Allowed Protocol: " + Config.getconfig().getInt("default-allowed-protocol")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Allowed Protocols: " + Processarraylists.processversionforchecking()));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Ping Prefix: " + Config.getconfig().getString("ping_prefix")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Blocked Message: " + Config.getconfig().getString("blocked-message")));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ---------------------------------"));
   }
   public static void reload(CommandSender sender)
 		  {
 	    Config.check("Reload");
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Config reload process finshed!"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Config reload process finshed!"));
 		sender.sendMessage(new TextComponent(""));
 		loaded(sender);
 		  }
   public static void license(CommandSender sender)
   {
-  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + "\r\nMIT License\r\n" + 
+  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + "\r\nMIT License\r\n" + 
   		"\r\n" + 
   		"Copyright (c) 2019 Begad666\r\n" + 
   		"\r\n" + 
@@ -148,33 +148,33 @@ public class CPS extends Command{
   {
   if (CPS.isEnabled)
   {
-	 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Features is already enabled!"));
+	 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Features is already enabled!"));
   }
   else
   {
-	  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Enabling Plugin Features..."));
+	  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Enabling Plugin Features..."));
 	PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
 	pluginManager.registerListener(Main.getInstance(), new ChangePingData());
 	pluginManager.registerListener(Main.getInstance(), new DisconnectBlockedProtocols());
 	pluginManager.registerCommand(Main.getInstance(), new Ping());
 	isEnabled = true;
-	sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Plugin Features Has been Enabled"));
+	sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Plugin Features Has been Enabled"));
   }
   }
   private void disable(CommandSender sender)
   {
 	  if (!CPS.isEnabled)
 	  {
-		 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Features is already disabled!"));
+		 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Features is already disabled!"));
 	  }
 	  else
 	  {
-		  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Disabling Plugin Features..."));
+		  sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Disabling Plugin Features..."));
 		PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
         pluginManager.unregisterListeners(Main.getInstance());
         pluginManager.unregisterCommand(new Ping());
         isEnabled = false;
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " The Plugin Features Has been Disabled"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Plugin Features Has been Disabled"));
 	  }
   }
   

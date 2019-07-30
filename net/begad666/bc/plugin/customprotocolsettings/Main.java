@@ -40,24 +40,24 @@ public class Main extends Plugin{
 		       String latest = Updates.getLatestVersion();
 		       if (latest == null)
 		       {
-		    	ProxyServer.getInstance().getLogger().warning(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Couldn't Check for Updates , Check Your Connection");
+		    	ProxyServer.getInstance().getLogger().warning(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't Check for Updates , Check Your Connection");
 		    	Updates.setUpdateInfo("true", "", "Couldn't Check for Updates");
 		       }
 		       if(latest != null)
 		       {
 		    	if(current.compareTo(latest) < 0) 
 		    	{
-		    	 ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " There is a new version: " + latest + " You are on: " + current);
+		    	 ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " You are on: " + current);
 		    	 Updates.setUpdateInfo("true", latest, "New Version:");
 		    	}
 		    	if(current.compareTo(latest) == 0)
 		    	{
-		    		ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " You are Up to Date");
+		    		ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
 		    		Updates.setUpdateInfo("false", null, null);
 		    	}
 		    	if(current.compareTo(latest) > 0)
 		    	{
-		    		ProxyServer.getInstance().getLogger().severe(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " You are using an unoffical version, please consider downloading an offical version from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
+		    		ProxyServer.getInstance().getLogger().severe(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are using an unoffical version, please consider downloading an offical version from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
 		    		Updates.setUpdateInfo("true", latest, " You are using an unoffical version, download an offical version here: https://www.spigotmc.org/resources/customprotocolsettings.69385/ Version:");
 		    	}
 		      
@@ -73,24 +73,24 @@ public class Main extends Plugin{
     String latest = Updates.getLatestVersion();
     if (latest == null)
     {
- 	ProxyServer.getInstance().getLogger().warning(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " Couldn't Check for Updates , Check Your Connection");
+ 	ProxyServer.getInstance().getLogger().warning(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't Check for Updates , Check Your Connection");
  	Updates.setUpdateInfo("true", "", "Couldn't Check for Updates");
     }
     if(latest != null)
     {
  	if(current.compareTo(latest) < 0) 
  	{
- 	 ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " There is a new version: " + latest + " You are on: " + current);
+ 	 ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " You are on: " + current);
  	 Updates.setUpdateInfo("true", latest, "New Version:");
  	}
  	if(current.compareTo(latest) == 0)
  	{
- 		ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " You are Up to Date");
+ 		ProxyServer.getInstance().getLogger().info(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
  		Updates.setUpdateInfo("false", null, null);
  	}
  	if(current.compareTo(latest) > 0)
  	{
- 		ProxyServer.getInstance().getLogger().severe(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("plugin_prefix")) + " You are using an unoffical version, please consider downloading an offical version from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
+ 		ProxyServer.getInstance().getLogger().severe(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are using an unoffical version, please consider downloading an offical version from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
  		Updates.setUpdateInfo("true", latest, " You are using an unoffical version, download an offical version here: https://www.spigotmc.org/resources/customprotocolsettings.69385/ Version:");
  	}
    

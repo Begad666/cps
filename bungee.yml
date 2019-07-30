@@ -1,5 +1,5 @@
 name: CustomProtocolSettings
-version: v1.3
+version: v1.3.1
 main: net.begad666.bc.plugin.customprotocolsettings.Main
 author: Begad666
 

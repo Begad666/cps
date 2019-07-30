@@ -1,5 +1,5 @@
-#Config Version , Don't try to edit or the plugin will not be active
-config-version: 'v2'
+#Config Version
+config-version: 'v4'
 #Protocol name
 protocol-name: 'Network'
 #MOTD
@@ -26,8 +26,12 @@ default-allowed-protocol: 340
 hover-message: 
  - '&6New Server is here!'
  - '&3COMEEEE'
-#Prefix of Plugin
-plugin_prefix: '&7[&3CustomProt&6ocolSettings&7]'
-#Prefix of the Ping Command
-ping_prefix: '&7[&3Pi&6ng&7]'
+#Prefixs
+prefixs:
+ #Prefix of Plugin
+ plugin: '&7[&3CustomProt&6ocolSettings&7]'
+ #Prefix of the Ping Command
+ ping: '&7[&3Pi&6ng&7]'
+#Password For Disabling and enabling
+password: 'Th3B3stPassw0rdinth3W0r1d'
 #for help check out https://github.com/Begad666/cps/wiki/Help

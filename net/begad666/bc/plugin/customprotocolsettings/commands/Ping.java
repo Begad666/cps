@@ -22,21 +22,21 @@ public class Ping extends Command {
 		{
 		ProxiedPlayer player = (ProxiedPlayer)sender;
 		int ping = player.getPing();
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("ping_prefix")) + " Your Ping is " + ping + " ms"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " Your Ping is " + ping + " ms"));
 		}
 		if (!(sender instanceof ProxiedPlayer))
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("ping_prefix")) + " You Must Be a Player!"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " You Must Be a Player!"));
 		}
 		}
 		if (args.length == 1)
 		{
 		try {
 		int ping = ProxyServer.getInstance().getPlayer(args[0]).getPing();
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("ping_prefix")) + args[0] + " Ping is " + ping + " ms"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + args[0] + " Ping is " + ping + " ms"));
 		} catch (Exception e)
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("ping_prefix")) + " That Player is not online!"));
+		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " That Player is not online!"));
 		}
 		}
 

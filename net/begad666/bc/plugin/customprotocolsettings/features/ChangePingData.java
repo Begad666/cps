@@ -17,11 +17,11 @@ public class ChangePingData implements Listener {
 	{
 	ServerPing serverPing = event.getResponse();
 	serverPing.setVersion(new ServerPing.Protocol( 
-	Config.getconfig().getString("protocol-name"), Processarraylists.processversion(serverPing.getVersion().getProtocol())));
-	serverPing.setPlayers(new ServerPing.Players(Config.getconfig().getInt("max-players"),serverPing
-	.getPlayers().getOnline(), Processarraylists.processhovermessage()));
-	serverPing.setDescriptionComponent(new TextComponent(ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("motd.1"))) + "\n§r" + 
-	ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("motd.2")))));
+	Config.getconfig().getBoolean("maintenancesettings.enabled") ? "MAINTENANCE" : Config.getconfig().getString("protocolsettings.protocol-name") , Config.getconfig().getBoolean("maintenancesettings.enabled") ? 999 : Processarraylists.processversion(serverPing.getVersion().getProtocol())));
+	serverPing.setPlayers(Config.getconfig().getBoolean("maintenancesettings.enabled") ?  new ServerPing.Players(0,0, Processarraylists.processmaintenancehovermessage()) : new ServerPing.Players(Config.getconfig().getInt("protocolsettings.max-players"),serverPing
+			.getPlayers().getOnline(), Processarraylists.processhovermessage()));
+	serverPing.setDescriptionComponent(Config.getconfig().getBoolean("maintenancesettings.enabled") ? new TextComponent(ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("maintenancesettings.motd.1"))) + "\n§r"+ ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("maintenancesettings.motd.2")))) : new TextComponent(ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("protocolsettings.motd.1"))) + "\n§r" + 
+	ProcessStrings.replacecodesandcolors(ProcessStrings.replaceplaceholders(Config.getconfig().getString("protocolsettings.motd.2")))));
 	serverPing.setFavicon(serverPing.getFaviconObject());
 	event.setResponse(serverPing); 
 	serverPing = null;
@@ -29,12 +29,3 @@ public class ChangePingData implements Listener {
 
 
 	
-}
-    
-        
-
-
-
-    
-
-

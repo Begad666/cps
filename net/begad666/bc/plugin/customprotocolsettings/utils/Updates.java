@@ -19,7 +19,7 @@ public class Updates {
 	private static String isUpdateRequired;
 	private static String VersionForUpdate;
 	private static String Message;
-	private static String ConfigVersion =  "v4";
+	private static String ConfigVersion =  "v5";
 
 	   public static String getLatestVersion() {
      try {

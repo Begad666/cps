@@ -8,7 +8,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.begad666.bc.plugin.customprotocolsettings.commands.CPS;
 import net.begad666.bc.plugin.customprotocolsettings.commands.Ping;
 import net.begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
-import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectBlockedProtocols;
+import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
 import net.begad666.bc.plugin.customprotocolsettings.utils.MetricsLite;
 import net.begad666.bc.plugin.customprotocolsettings.utils.ProcessStrings;
@@ -129,7 +129,7 @@ public class Main extends Plugin{
 	PluginManager pluginManager = getProxy().getPluginManager();
 	
 	pluginManager.registerListener(getInstance(), new ChangePingData());
-	pluginManager.registerListener(getInstance(), new DisconnectBlockedProtocols());
+	pluginManager.registerListener(getInstance(), new DisconnectNotAllowedUsers());
 	}
 	
   private void RegisterCommands()

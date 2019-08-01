@@ -6,9 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -19,7 +17,6 @@ public class Config {
 	private static File file;
 	private static Configuration config;
 	private static String cv;
-	private static boolean isRenewRequired;
 	public static void check(String method)
 	{
 	file = new File(Main.getInstance().getDataFolder(), "config.yml");
@@ -42,9 +39,8 @@ public class Config {
         {
         if (cv.compareTo(Updates.getConfigVersion()) < 0)
         {
-        ProxyServer.getInstance().getLogger().warning("CustomProtocolSettings: You must renew the config by typing /cps renew, most features will throw an error");
-        ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: You must renew the config by typing /cps renew, most features will throw an error");}}, 10,10, TimeUnit.SECONDS);
-        isRenewRequired = true;
+        ProxyServer.getInstance().getLogger().warning("CustomProtocolSettings: You must delete the config then set it up again to refresh the config");
+        ScheduledTasks.configversionerrorremindertask = ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: You must delete the config then set it up again to refresh the config");}}, 10,10, TimeUnit.SECONDS);
         }
         if (cv.compareTo(Updates.getConfigVersion()) == 0)
         {
@@ -59,8 +55,8 @@ public class Config {
    	    PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
    	    pluginmanager.unregisterCommands(Main.getInstance());
    	    pluginmanager.unregisterListeners(Main.getInstance());
-   	    ProxyServer.getInstance().getScheduler().cancel(Main.getInstance());
-   	    ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: The Plugin is HANGED because the Config version is Higher Than The Plugin version");}}, 10,10, TimeUnit.SECONDS);
+   	    ProxyServer.getInstance().getScheduler().cancel(ScheduledTasks.updatetask2);
+   	    ScheduledTasks.configversionerrorremindertask = ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: The Plugin is HANGED because the Config version is Higher Than The Plugin version");}}, 10,10, TimeUnit.SECONDS);
         }
         if (config.getString("config-version") == null)
         {
@@ -68,8 +64,8 @@ public class Config {
    	    PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
    	    pluginmanager.unregisterCommands(Main.getInstance());
    	    pluginmanager.unregisterListeners(Main.getInstance());
-   	    ProxyServer.getInstance().getScheduler().cancel(Main.getInstance());
-   	    ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: The Plugin is HANGED because the Config version is not accessible, if this an update from v1.1 or v1.0 (Was Name Final) add config-version: 'v1' to the config file");}}, 10,10, TimeUnit.SECONDS);
+   	    ProxyServer.getInstance().getScheduler().cancel(ScheduledTasks.updatetask2);
+   	    ScheduledTasks.configversionerrorremindertask = ProxyServer.getInstance().getScheduler().schedule(Main.getInstance(), new Runnable() {public void run() {ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: The Plugin is HANGED because the Config version is not accessible, if this an update from v1.1 or v1.0 (Was Named Final) add config-version: 'v1' to the config file");}}, 10,10, TimeUnit.SECONDS);
         }
         
         }
@@ -77,7 +73,7 @@ public class Config {
     
 	}
 	
-	public static void load()
+	private static void load()
 	{
 		 if (!Main.getInstance().getDataFolder().exists())
 			 Main.getInstance().getDataFolder().mkdir();
@@ -108,7 +104,7 @@ public class Config {
 
 	}
 	
-	 public static void reload()
+	 private static void reload()
 	 {   
 		 file = null;
 		 config = null;
@@ -135,17 +131,9 @@ public class Config {
 				}
 	        }
 	 }
-	 public static void renew(CommandSender sender,String configversiontorenew)
-	 {
-	 sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefix")) + " Version v1.1 and v1.0 (Was Named Final) Versions from this Plugin are not supported to renewing, to manualy make renew add config-version: 'v1' to the config file"));
-	 }
 	 public static Configuration getconfig()
 	 {
      return config;
-	 }
-	 public static boolean getIsRenewRequired() 
-	 {
-	 return isRenewRequired;
 	 }
 
 }

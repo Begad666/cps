@@ -1,20 +1,20 @@
 #Config Version
-config-version: 'v5'
+config-version: 'v6'
 #Enable or disable the update checker
 update-checker-enabled: true
-#Password For Disabling and enabling
+#Password For Superrrrr-Admins commands
 password: 'Th3B3stPassw0rdinth3W0r1d'
-#Protocol Settings
-protocolsettings:
-#Protocol name
- protocol-name: 'Network'
-#MOTD
- motd: 
-  1: '&6Network is &5now open!'
-  2: '&3Come To &aPlay'
-#Max Players
+
+#Info about your network
+network-info:
+#The name when there is a not supported client
+ name: 'Network'
+#Max Players, used for player count and max player checking
  max-players: 100
-#Allowed Protocols , check out this link for protocol version numbers wiki.vg/Protocol_version_numbers
+
+#Settings for the server
+settings:
+#Allowed Protocol, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
  allowed-protocols:
   - 340
   - 393
@@ -22,32 +22,77 @@ protocolsettings:
   - 477
   - 485
   - 490
-#Blocked Message
- blocked-message: 'You are not allowed to use this minecraft version'
-#Default Protocol , check out this link for protocol version numbers wiki.vg/Protocol_version_numbers
- default-allowed-protocol: 340
-#Hover Message
- hover-message: 
+#Set this as the version of the server (like your server version is 1.12.2 then set this as it)
+ server-protocol: 340
+#Is maintenance enabled?
+ maintenance-enabled: false
+
+#MOTDs
+motds:
+ default-motd: 
+  1: '&6Network is &5now open!'
+  2: '&3Come To &aPlay'
+ maintenance-motd:
+  1: 'New Update on maintenance'
+  2: 'Please Wait'
+ 
+#Hover messages
+hover-messages:
+#Message shown when hovering the mouse over the player count when no maintenance is ON
+ default-hover-message: 
   - '&6New Server is here!'
   - '&3COMEEEE'
+#Oppsite of the above, when maintenance is ON
+ maintenance-hover-message: 
+  - 'Maintenance'
+
 #Prefixs
 prefixs:
  #Prefix of Plugin
  plugin: '&7[&3CustomProt&6ocolSettings&7]'
  #Prefix of the Ping Command
  ping: '&7[&3Pi&6ng&7]'
-#Maintenance Settings
-maintenancesettings:
- enabled: false
- motd: 
-  1: 'New Update on maintenance'
-  2: 'Please Wait'
- hover-message: 
-  - 'Maintenance'
- blocked-message: 'We are currently on maintenance , There are %online% staff(s) online in maintenance'
-#Allowed Players to join while in maintenance
- allowed-players:
+ 
+ 
+ 
+#Messages
+messages:
+#Message when the client doesn't match the allowed protocols above
+ not-supported-client-message: 'You are not allowed to use this minecraft version'
+#Message when the client doesn't match the allowed players when there is a maintenance
+ maintenance-message: 'We are currently on maintenance, there are %online% staff(s) online in maintenance'
+#Message when the server is full
+ full-message: 'The server is full, try again later'
+ 
+ 
+ 
+#Allowed Players to join while (players full or maintenance), player names are currently supported (UUIDs support on the way)
+allowed-players:
  - 'owner'
  - 'staff1'
  - 'staff2'
-#for help check out https://github.com/Begad666/cps/wiki/Help
+
+#MultiProxy Support
+multiproxy:
+#Enable MultiProxy Support
+ enable: false
+#ID of the Group
+ groupid: '1'
+#Is Auto Pull Enabled
+ autopull: false
+#The time beetwen every pull in minutes
+ autopulltime: 3
+
+#The connection settings for the database (Currently MySQL/MariaDB is Supported)
+connectionsettings:
+#Where the database are hosted
+ host: 'localhost'
+#The Port
+ port: 3306
+#The Database Name
+ database: 'minecraft'
+#The User of the Database
+ user: 'root'
+#The User Password
+ password: ''
+#Done, go type /cps reload

@@ -1,7 +1,7 @@
 package net.begad666.bc.plugin.customprotocolsettings.commands;
 
 import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
-import net.begad666.bc.plugin.customprotocolsettings.utils.ProcessStrings;
+import net.begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,21 +22,21 @@ public class Ping extends Command {
 		{
 		ProxiedPlayer player = (ProxiedPlayer)sender;
 		int ping = player.getPing();
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " Your Ping is " + ping + " ms"));
+		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " Your Ping is " + ping + " ms"));
 		}
 		if (!(sender instanceof ProxiedPlayer))
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " You Must Be a Player!"));
+		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " You Must Be a Player!"));
 		}
 		}
 		if (args.length == 1)
 		{
 		try {
 		int ping = ProxyServer.getInstance().getPlayer(args[0]).getPing();
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + args[0] + " Ping is " + ping + " ms"));
+		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + args[0] + " Ping is " + ping + " ms"));
 		} catch (Exception e)
 		{
-		sender.sendMessage(new TextComponent(ProcessStrings.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " That Player is not online!"));
+		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.ping")) + " That Player is not online!"));
 		}
 		}
 

@@ -13,9 +13,6 @@ import com.google.gson.Gson;
 
 import net.begad666.bc.plugin.customprotocolsettings.Main;
 
-
-
-
 public class Updates {
 	private static String isUpdateRequired;
 	private static String VersionForUpdate;

@@ -82,6 +82,8 @@ multiproxy:
  autopull: false
 #The time beetwen every pull in minutes
  autopulltime: 3
+#Auto save config when the pull happens? (means that when the server pulls, should it save the config to config file or leave it in memory)
+ autosave: false
 
 #The connection settings for the database (Currently MySQL/MariaDB is Supported)
 connectionsettings:

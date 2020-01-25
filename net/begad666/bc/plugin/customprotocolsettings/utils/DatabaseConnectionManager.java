@@ -31,7 +31,7 @@ public class DatabaseConnectionManager {
 			}  
 			try 
 			{
-				connection = DriverManager.getConnection("jdbc:mysql://" + Config.getconfig().getString("multiproxy.connectionsettings.host") + ":" + Config.getconfig().getInt("multiproxy.connectionsettings.port") + "/" + Config.getconfig().getString("multiproxy.connectionsettings.database"),Config.getconfig().getString("multiproxy.connectionsettings.user"),Config.getconfig().getString("multiproxy.connectionsettings.password"));
+				connection = DriverManager.getConnection("jdbc:mysql://" + Config.getconfig().getString("connectionsettings.host") + ":" + Config.getconfig().getInt("connectionsettings.port") + "/" + Config.getconfig().getString("connectionsettings.database"),Config.getconfig().getString("connectionsettings.user"),Config.getconfig().getString("connectionsettings.password"));
 			} 
 			catch (SQLException e) 
 			{

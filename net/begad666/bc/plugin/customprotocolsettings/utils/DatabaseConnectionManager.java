@@ -1,13 +1,14 @@
 package net.begad666.bc.plugin.customprotocolsettings.utils;
 
 import java.sql.*;
+import java.util.concurrent.Executor;
 
 import net.md_5.bungee.api.ProxyServer;
 
 public class DatabaseConnectionManager {
 	private static Connection connection;
 	private static Statement stmt;
-	private static boolean isConnected;
+	private static boolean isConnected = false;
 	public static Connection getConnection()
 	{
 		return connection;
@@ -26,7 +27,7 @@ public class DatabaseConnectionManager {
 			} 
 			catch (ClassNotFoundException e) 
 			{
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The MySQL Driver was not found, please make sure you compiled bungeecord with it (because every pre-compiled version of bungeecord have it), cancelling mysql connection");
+				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The MySQL Driver was not found, cancelling mysql connection");
 				return;
 			}  
 			try 
@@ -36,7 +37,7 @@ public class DatabaseConnectionManager {
 			catch (SQLException e) 
 			{
 				e.printStackTrace();
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error establishing connection to the database, read the stack trace carefuly to check what is wrong , cancelling mysql connection");
+				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error establishing connection to the database, cancelling mysql connection");
 				return;
 			}
 			try 
@@ -46,8 +47,17 @@ public class DatabaseConnectionManager {
 			catch (SQLException e) 
 			{
 				e.printStackTrace();
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while setting up autocommit, read the stack trace carefuly to check what is wrong, disconnecting from database");
-				connection = null;
+				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while finishing up connection, disconnecting from database");
+				try {
+					connection.abort(new Executor() {
+						@Override
+						public void execute(Runnable command) {
+							
+						}
+					});
+				} catch (SQLException severeerror) {
+					ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) +  " *****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666-mc-works/cps \nException:\n" + severeerror);
+				}
 				return;
 			}
 			isConnected = true;
@@ -57,7 +67,16 @@ public class DatabaseConnectionManager {
 	{
 		if (isConnected == true)
 		{
-			connection = null;
+			try {
+				connection.abort(new Executor() {
+					@Override
+					public void execute(Runnable command) {
+						
+					}
+				});
+			} catch (SQLException e) {
+				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) +  " *****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666-mc-works/cps \nException:\n" + e);
+			}
 			isConnected = false;
 		}
 	}
@@ -70,7 +89,7 @@ public class DatabaseConnectionManager {
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment , read the stack trace carefuly to check what is wrong , cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment, cancelling statment execution");
 			return 5;
 		}
 		try 
@@ -82,7 +101,7 @@ public class DatabaseConnectionManager {
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \" , read the stack trace carefuly to check what is wrong , cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \", cancelling statment execution");
 			return 5;
 		}  
 	}
@@ -95,7 +114,7 @@ public class DatabaseConnectionManager {
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment , read the stack trace carefuly to check what is wrong , cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment, cancelling statment execution");
 			return null;
 		}
 		try 
@@ -107,7 +126,7 @@ public class DatabaseConnectionManager {
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \" , read the stack trace carefuly to check what is wrong , cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \", cancelling statment execution");
 			return null;
 		}  
 	}

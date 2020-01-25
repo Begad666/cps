@@ -11,6 +11,7 @@ import net.begad666.bc.plugin.customprotocolsettings.commands.CPS;
 import net.begad666.bc.plugin.customprotocolsettings.commands.Ping;
 import net.begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
 import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
+import net.begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
 import net.begad666.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
 import net.begad666.bc.plugin.customprotocolsettings.utils.MetricsLite;
@@ -21,15 +22,15 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-public class Main extends Plugin{
+public class Main extends Plugin {
 	private static Main instance;
 	public void onEnable()
     {   
 		instance = this;
 		getInstance().getLogger().info("Started Enable Process");
 		getInstance().getLogger().info("Loading Config...");
-		boolean bool = Config.check("Load");
-		if (!bool) 
+		boolean result = Config.check();
+		if (!result) 
 		{
 			return;
 		}
@@ -40,13 +41,20 @@ public class Main extends Plugin{
 	    if (Config.getconfig().getBoolean("multiproxy.enable"))
 	    {
 	    	getInstance().getLogger().info("Connecting To Database...");
-	    	DatabaseConnectionManager.connect();
-	    	DatabaseConnectionManager.executeUpdate(
-	    			"CREATE TABLE IF NOT EXISTS `cps` "
-	    			+ "( `groupId` VARCHAR(25) NOT NULL ," 
-	    			+ " `configjson` LONGTEXT NOT NULL ,"
-	    			+ "	PRIMARY KEY (`groupId`)" 
-	    			+ ")" );
+	    	ProxyServer.getInstance().getScheduler().runAsync(getInstance(), new Runnable() 
+	    	{
+				public void run() 
+				{
+					DatabaseConnectionManager.connect();
+			    	DatabaseConnectionManager.executeUpdate(
+			    			"CREATE TABLE IF NOT EXISTS `cps` "
+			    			+ "( `groupId` VARCHAR(25) NOT NULL ," 
+			    			+ " `configjson` LONGTEXT NOT NULL ,"
+			    			+ "	PRIMARY KEY (`groupId`)" 
+			    			+ ")" );
+				}
+	    	});
+
 	    	ScheduledTasks.autoreconnecttask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), new Runnable() 
 	    	{
 	    		public void run() 
@@ -79,7 +87,7 @@ public class Main extends Plugin{
 	    					ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while pulling data from database, no changes will be made"));
 	    					return;
 	    				}
-	    				
+	    				MultiProxy.ApplyData(configjson, Config.getconfig().getBoolean("multiproxy.autosaveconfig"));
 	    			}
 	    		} ,Config.getconfig().getInt("multiproxy.autopulltime"), Config.getconfig().getInt("multiproxy.autopulltime"), TimeUnit.MINUTES);
 	    }
@@ -171,14 +179,12 @@ public class Main extends Plugin{
 	    {
 	    	Updates.setUpdateInfo("true", "", "Updates Are Disabled");
 	    }
-	    CPS.isEnabled = true;
-	    getInstance().getLogger().info(Updates.getCurrentVersion() + " Is now enabled!");
-	   
+	    CPS.isEnabled = true;   
     }
 	public void onDisable()
 	{
 		PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
-		getInstance().getLogger().info("Started Disable Process...");
+		getInstance().getLogger().info("Started Disable Process");
 		getInstance().getLogger().info("Unregistering Commands...");
 		pluginmanager.unregisterCommands(Main.getInstance());
 		getInstance().getLogger().info("Unregistering Listeners...");

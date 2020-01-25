@@ -152,7 +152,7 @@ public class CPS extends Command{
 	}
     public static void reload(CommandSender sender)
     {
-	    Config.check("Reload");
+	    Config.check();
 	    Main.getInstance().getLogger().info("Disconnecting From Database");
 	    DatabaseConnectionManager.disconnect();
 	    Main.getInstance().getLogger().info("Reconnecting to Database");

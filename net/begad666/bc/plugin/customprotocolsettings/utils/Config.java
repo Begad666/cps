@@ -15,7 +15,7 @@ public class Config {
 	private static File file;
 	private static Configuration config;
 	private static String cv = null;
-	public static boolean check(String method)
+	public static boolean check()
 	{
 		file = new File(Main.getInstance().getDataFolder(), "config.yml");
 
@@ -39,18 +39,12 @@ public class Config {
 				if (cv.compareTo(Updates.getConfigVersion()) < 0)
 				{
 					ProxyServer.getInstance().getLogger().warning("CustomProtocolSettings: Config isn't up-to-date, config will load but some features will break");
-					if(method == "Load")
-						load();
-					if(method == "Reload")
-						reload();
+					load();
 					return true;
 				}
 				else if (cv.compareTo(Updates.getConfigVersion()) == 0)
 				{
-					if(method == "Load")
-						load();
-					if(method == "Reload")
-						reload();
+					load();
 					return true;
 				}
 				else if(cv.compareTo(Updates.getConfigVersion()) > 0)
@@ -100,36 +94,9 @@ public class Config {
 				}
 	        }
 	}	
-	 private static void reload()
-	 {   
-		 file = null;
-		 config = null;
-		 if (!Main.getInstance().getDataFolder().exists())
-			 Main.getInstance().getDataFolder().mkdir();
-
-	        file = new File(Main.getInstance().getDataFolder(), "config.yml");
-
-	   
-	        if (!file.exists()) {
-	            try (InputStream in = Main.getInstance().getResourceAsStream("config.yml")) {
-	                Files.copy(in, file.toPath());
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-
-	        }
-	        if(file.exists())
-	        {
-	            try {
-	            	config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(Main.getInstance().getDataFolder(), "config.yml"));
-	            } catch (IOException e) {
-					e.printStackTrace();
-				}
-	        }
-	 }
-	 public static Configuration getconfig()
-	 {
-     return config;
-	 }
+	public static Configuration getconfig()
+	{
+		return config;
+	}
 
 }

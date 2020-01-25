@@ -7,11 +7,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.Gson;
 
 import net.begad666.bc.plugin.customprotocolsettings.Main;
+import com.google.gson.*;
 
 public class Updates {
 	private static String isUpdateRequired;
@@ -39,10 +37,9 @@ public class Updates {
       
 			try
 			{
-				JsonObject updatestat;
-				Gson gson = new Gson();
-				updatestat = (JsonObject)gson.fromJson(content, JsonObject.class);
-				return updatestat.get("name").getAsString();
+			    JsonObject updatestat;
+			    updatestat = (JsonObject)new Gson().fromJson(content, JsonObject.class);
+			    return updatestat.get("name").getAsString();
 			} 
 			catch (JsonParseException e) 
 			{

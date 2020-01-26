@@ -3,23 +3,22 @@ package net.begad666.bc.plugin.customprotocolsettings.commands;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.begad666.bc.plugin.customprotocolsettings.Main;
 import net.begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
 import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
+import net.begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
 import net.begad666.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
 import net.begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
@@ -27,8 +26,6 @@ import net.begad666.bc.plugin.customprotocolsettings.utils.ScheduledTasks;
 import net.begad666.bc.plugin.customprotocolsettings.utils.Updates;
 
 public class CPS extends Command{
-	private static String messagefromMessageinfo;
-	private static String versionforupdating;
 	public static boolean isEnabled;
 	
 	public CPS()
@@ -40,23 +37,12 @@ public class CPS extends Command{
 		{
 			if (args.length != 2) 
 			{
-				ArrayList<String> list = Updates.getUpdateInfo();
-		    if(list.get(0) == "true") 
-		    {
-		    	messagefromMessageinfo = list.get(2);
-		    	versionforupdating = list.get(1);
-		    }
-		    if(list.get(0) == "false")
-		    {
-		    	messagefromMessageinfo = "No Updates is Required";
-		    	versionforupdating = "";
-		    }
 				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ------------------------------"));
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Compile Version: " + Updates.getCurrentVersion()));
+				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Compile Version: " + Updates.getCompileCurrentVersion()));
 				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Version: " + Main.getInstance().getDescription().getVersion()));
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Compile Config Version: " + Updates.getConfigVersion()));
+				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Compile Config Version: " + Updates.getCompileConfigVersion()));
 				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Config Version: " + Config.getconfig().getString("config-version")));
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Updates:" + messagefromMessageinfo + " " + versionforupdating));
+				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Updates: " + Updates.getMessage()));
 				TextComponent pluglink = new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Plugin Page: Click Here" );
 				pluglink.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/customprotocolsettings.69385/"));
 				sender.sendMessage(pluglink);
@@ -66,71 +52,63 @@ public class CPS extends Command{
 				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " ------------------------------"));
 			}
 		}
-		
-		if (args.length >= 1)
+		else if (args.length >= 1)
 		{
-			if ((args[0].equalsIgnoreCase("reload")))
+			switch (args[0].toLowerCase()) 
 			{
-				reload(sender);
-			}
-			if ((args[0].equalsIgnoreCase("ps")))
-			{	
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
-			}
-			if ((args[0].equalsIgnoreCase("ms")))
-			{	
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
-			}
-			if ((args[0].equalsIgnoreCase("pf")))
-			{
-				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
-			}
-			if ((args[0].equalsIgnoreCase("license")))
-			{
-				license(sender);
-			}
-			if ((args[0].equalsIgnoreCase("enable")))
-			{
-				try 
-				{
-					if ((args[1].equals(Config.getconfig().getString("password")))) 
+				case "reload":
+					reload(sender);
+				break;
+				case "ps":
+					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
+				break;
+				case "ms":
+					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
+				break;
+				case "pf":
+					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " That command was deleted in v2.0, sorry for the inconvenience"));
+				break;
+				case "license":
+					license(sender);
+				break;
+				case "enable":
+					try 
 					{
-						enable(sender);
-					}
-					else
+						if ((args[1].equals(Config.getconfig().getString("password")))) 
+						{
+							enable(sender);
+						}
+						else
+						{
+							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The password is wrong, please try again"));
+						}
+					} 
+					catch (Exception e)
 					{
-						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Password is wrong , Please Try Again"));
+						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 					}
-				} 
-				catch (Exception e)
-				{
-					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
-				}
-			}
-			if ((args[0].equalsIgnoreCase("disable")))
-			{
-				try 
-				{
-					if ((args[1].equals(Config.getconfig().getString("password")))) 
+				break;
+				case "disable":
+					try 
 					{
-						disable(sender);
-					}
-					else
+						if ((args[1].equals(Config.getconfig().getString("password")))) 
+						{
+							disable(sender);
+						}
+						else
+						{
+							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The password is wrong, please Try Again"));
+						}
+					} 
+					catch (Exception e)
 					{
-						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Password is wrong , Please Try Again"));
+						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 					}
-				}
-				catch (Exception e)
-				{
-					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
-				}
-			}
-			if ((args[0].equalsIgnoreCase("checkdbconnection")))
-			{
-				checkdbconnection(sender);
-			}
-			if ((args[0].equalsIgnoreCase("pullnow")))
-			{
+				break;
+				case "checkdbconnection":
+					checkdbconnection(sender);
+				break;
+				case "pullnow":
 				if (Config.getconfig().getBoolean("multiproxy.enable"))
 				{
 					if (DatabaseConnectionManager.getConnected())
@@ -146,6 +124,10 @@ public class CPS extends Command{
 				{
 					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " MultiProxy Isn't Enabled"));
 				}
+				break;
+				default:
+					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Unknown argument"));
+				break;
 			}
 
 		}
@@ -153,9 +135,9 @@ public class CPS extends Command{
     public static void reload(CommandSender sender)
     {
 	    Config.check();
-	    Main.getInstance().getLogger().info("Disconnecting From Database");
+	    Main.getInstance().getLogger().info("Disconnecting From Database...");
 	    DatabaseConnectionManager.disconnect();
-	    Main.getInstance().getLogger().info("Reconnecting to Database");
+	    Main.getInstance().getLogger().info("Reconnecting to Database...");
 	    DatabaseConnectionManager.connect();
 		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Config reload process finished!"));
 	}
@@ -245,12 +227,13 @@ public class CPS extends Command{
   private void pullnow(CommandSender sender)
   {
 		ResultSet data = null;
-		Gson configjson = new Gson();
+		Gson gson = new Gson();
+		JsonObject configjson = null;
 		try 
 		{
 			data = DatabaseConnectionManager.executeQuery("SELECT configjson FROM cps WHERE groupId='" + Config.getconfig().getString("multiproxy.groupid") + "'"); 
 			while(data.next())
-				configjson.toJson(data.getString("configjson"));
+				configjson = gson.fromJson(data.getString("configjson"), JsonObject.class);
 		} 
 		catch (JsonSyntaxException e) 
 		{
@@ -262,7 +245,7 @@ public class CPS extends Command{
 			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while pulling data from database, no changes will be made"));
 			return;
 		}
-  
+		MultiProxy.ApplyData(configjson, Config.getconfig().getBoolean("multiproxy.autosaveconfig"));
   }
   
 }

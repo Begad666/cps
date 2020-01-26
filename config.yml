@@ -2,7 +2,7 @@
 config-version: 'v6'
 #Enable or disable the update checker
 update-checker-enabled: true
-#Password For Superrrrr-Admins commands
+#Password For Superrrrr-Admins commands (NO SPACES)
 password: 'Th3B3stPassw0rdinth3W0r1d'
 
 #Info about your network
@@ -26,23 +26,27 @@ settings:
  server-protocol: 340
 #Is maintenance enabled?
  maintenance-enabled: false
+#Go to allowed-players for more info
+ online-mode: true
 
 #MOTDs
 motds:
+#Default MOTD while there is no maintenance on going
  default-motd: 
   1: '&6Network is &5now open!'
   2: '&3Come To &aPlay'
+#Oppsite of above
  maintenance-motd:
   1: 'New Update on maintenance'
   2: 'Please Wait'
  
 #Hover messages
 hover-messages:
-#Message shown when hovering the mouse over the player count when no maintenance is ON
+#Message shown when hovering the mouse over the player count while no maintenance on going
  default-hover-message: 
   - '&6New Server is here!'
   - '&3COMEEEE'
-#Oppsite of the above, when maintenance is ON
+#Oppsite of the above
  maintenance-hover-message: 
   - 'Maintenance'
 
@@ -53,8 +57,6 @@ prefixs:
  #Prefix of the Ping Command
  ping: '&7[&3Pi&6ng&7]'
  
- 
- 
 #Messages
 messages:
 #Message when the client doesn't match the allowed protocols above
@@ -64,9 +66,9 @@ messages:
 #Message when the server is full
  full-message: 'The server is full, try again later'
  
- 
- 
-#Allowed Players to join while (players full or maintenance), player names are currently supported (UUIDs support on the way)
+#Allowed Players to join while (players full or maintenance), UUIDs are supported with online-mode: true servers and player names are supported with online-mode: false servers 
+#set network-info.online-mode respectively
+#You can't use UUIDs with player names or player names and UUIDs
 allowed-players:
  - 'owner'
  - 'staff1'

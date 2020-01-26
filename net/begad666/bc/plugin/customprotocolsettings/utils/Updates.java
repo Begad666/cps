@@ -5,18 +5,17 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 
 import net.begad666.bc.plugin.customprotocolsettings.Main;
-import com.google.gson.*;
+import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 public class Updates {
-	private static String isUpdateRequired;
-	private static String VersionForUpdate;
-	private static String Message;
 	private static String ConfigVersion =  "v6";
 	private static String CurrentVersion = "v2.0";
+	private static String Message = "No Updates Required";
 
 	public static String getLatestVersion() 
 	{
@@ -25,7 +24,7 @@ public class Updates {
 			URL url = new URL("https://api.spiget.org/v2/resources/69385/versions/latest?" + System.currentTimeMillis());
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setUseCaches(true);
-			connection.addRequestProperty("User-Agent", Main.getInstance().getDescription().getName() + " Plugin Updater | " + getCurrentVersion());
+			connection.addRequestProperty("User-Agent", Main.getInstance().getDescription().getName() + " Plugin Updater | " + getCompileCurrentVersion());
 			connection.setDoOutput(true);
 			BufferedReader br = new BufferedReader(new java.io.InputStreamReader(connection.getInputStream()));
 			String content = "";
@@ -33,8 +32,7 @@ public class Updates {
 			{
 				content = content + input;
 			}
-			br.close();
-      
+			br.close();    
 			try
 			{
 			    JsonObject updatestat;
@@ -57,28 +55,24 @@ public class Updates {
 		}
      }
       
-	 public static String getCurrentVersion()
+	 public static String getCompileCurrentVersion()
 	 {
 		 return CurrentVersion;
 	 }
 	 
-	 public static String getConfigVersion()
+	 public static String getCompileConfigVersion()
 	 {
 		 return ConfigVersion;
 	 }
 	 
-	 public static void setUpdateInfo(String iur, String vfu, String m)
+	 public static void setMessage(String msg) 
 	 {
-		 isUpdateRequired = iur;
-		 VersionForUpdate = vfu;
-		 Message = m;
+		 Message = msg;
 	 }
-	 public static ArrayList<String> getUpdateInfo()
+	 
+	 public static String getMessage() 
 	 {
-		 ArrayList<String> list = new ArrayList<String>();
-		 list.add(isUpdateRequired);
-		 list.add(VersionForUpdate);
-		 list.add(Message);
-		 return list;
+		 return Message;
 	 }
+	 
 }

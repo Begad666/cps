@@ -36,18 +36,18 @@ public class Config {
 			}
 			if (cv != null)
 			{
-				if (cv.compareTo(Updates.getConfigVersion()) < 0)
+				if (cv.compareTo(Updates.getCompileConfigVersion()) < 0)
 				{
-					ProxyServer.getInstance().getLogger().warning("CustomProtocolSettings: Config isn't up-to-date, config will load but some features will break");
+					ProxyServer.getInstance().getLogger().warning("CustomProtocolSettings: Config isn't up-to-date, config will load but some features might break");
 					load();
 					return true;
 				}
-				else if (cv.compareTo(Updates.getConfigVersion()) == 0)
+				else if (cv.compareTo(Updates.getCompileConfigVersion()) == 0)
 				{
 					load();
 					return true;
 				}
-				else if(cv.compareTo(Updates.getConfigVersion()) > 0)
+				else if(cv.compareTo(Updates.getCompileConfigVersion()) > 0)
 				{
 					ProxyServer.getInstance().getLogger().severe("CustomProtocolSettings: You are using a version of a config which is higher than this version requires, cannot load the plugin");
 					return false;

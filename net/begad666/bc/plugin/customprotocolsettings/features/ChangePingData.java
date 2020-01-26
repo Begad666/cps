@@ -12,8 +12,8 @@ import net.begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
 public class ChangePingData implements Listener {
 
 	
-	@EventHandler
-	public void Ping(ProxyPingEvent event) 
+	@EventHandler(priority = 32)
+	public void onPing(ProxyPingEvent event) 
 	{
 		ServerPing serverPing = event.getResponse();
 		if (Config.getconfig().getBoolean("settings.maintenance-enabled")) 
@@ -29,7 +29,6 @@ public class ChangePingData implements Listener {
 			serverPing.setDescriptionComponent(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("motds.default-motd.1") + "\n§r" + Config.getconfig().getString("motds.default-motd.2"))));
 		}
 		event.setResponse(serverPing); 
-		serverPing = null;
 	}
 
 

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.begad666.bc.plugin.customprotocolsettings.commands.CPS;
@@ -24,6 +25,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 
 public class Main extends Plugin {
 	private static Main instance;
+	public static boolean OnlineMode;
 	public void onEnable()
     {   
 		instance = this;
@@ -64,18 +66,19 @@ public class Main extends Plugin {
 	    			DatabaseConnectionManager.connect();
 	    		} 
 	    	}, 8,8, TimeUnit.HOURS);
-	    	if (Config.getconfig().getBoolean("multiproxy.autopull"))
+	    	if (Config.getconfig().getBoolean("multiproxy.autopull") && Config.getconfig().getBoolean("multiproxy.enable"))
 	    		ScheduledTasks.autopulltask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), new Runnable()
 	    		{
 	    			public void run() 
 	    			{
 	    				ResultSet data = null;
-	    				Gson configjson = new Gson();
+	    				Gson gson = new Gson();
+	    				JsonObject configjson = null;
 	    				try 
 	    				{
 		    				data = DatabaseConnectionManager.executeQuery("SELECT configjson FROM cps WHERE groupId='" + Config.getconfig().getString("multiproxy.groupid") + "'"); 
 	    					while(data.next())
-	    						configjson.toJson(data.getString("configjson"));
+	    						configjson = gson.fromJson(data.getString("configjson"), JsonObject.class);
 	    				} 
 	    				catch (JsonSyntaxException e) 
 	    				{
@@ -92,43 +95,43 @@ public class Main extends Plugin {
 	    		} ,Config.getconfig().getInt("multiproxy.autopulltime"), Config.getconfig().getInt("multiproxy.autopulltime"), TimeUnit.MINUTES);
 	    }
 	    MetricsLite metrics = new MetricsLite(getInstance());
-	    Updates.setUpdateInfo("true", "", "Please Wait...");
+	    Updates.setMessage("Please wait...");
 	    if(Config.getconfig().getBoolean("update-checker-enabled") == true)
 	    {
 	    	ScheduledTasks.updatetask1 = ProxyServer.getInstance().getScheduler().schedule(getInstance(), new Runnable()
 		    {
     			public void run()
     			{
-    				String current = Updates.getCurrentVersion();
+    				String current = Updates.getCompileCurrentVersion();
     				String latest = Updates.getLatestVersion();
     				if (latest == null)
     				{
-    					ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't Check for Updates, Check Your Connection");
-    					Updates.setUpdateInfo("true", "", "Couldn't Check for Updates");
+    					ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't check for updates, check Your Connection");
+    					Updates.setMessage("Couldn't check for updates");
     				}
     				if (latest != null)
     				{
     					if(current.compareTo(latest) < 0) 
     					{
-    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " You are on: " + current);
-    						Updates.setUpdateInfo("true", latest, " New Version:");
+    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " you are on: " + current);
+    						Updates.setMessage("New version is out: " + latest);
     					}
     					if(current.compareTo(latest) == 0)
     					{
-    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
-    						Updates.setUpdateInfo("false", null, null);
+    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are up to date");
+    						Updates.setMessage("You are up to date");
     					}
     					if(current.compareTo(latest) > 0)
     					{
-    						if (getInstance().getDescription().getVersion().compareTo(Updates.getCurrentVersion()) > 0 || getInstance().getDescription().getVersion().compareTo(Updates.getCurrentVersion()) < 0) 
+    						if (getInstance().getDescription().getVersion().compareTo(Updates.getCompileCurrentVersion()) > 0 || getInstance().getDescription().getVersion().compareTo(Updates.getCompileCurrentVersion()) < 0) 
     						{
     							ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
-    							Updates.setUpdateInfo("true", latest, " Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/, Latest version is ");
+    							Updates.setMessage("Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/, Latest version is " + latest);
     						}
     						else 
     						{
-        						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
-        						Updates.setUpdateInfo("false", null, null);
+        						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are up to date");
+        						Updates.setMessage("You are up to date");
     						}
     					}
     				}
@@ -139,36 +142,36 @@ public class Main extends Plugin {
 
     			public void run()
     			{
-    				String current = Updates.getCurrentVersion();
+    				String current = Updates.getCompileCurrentVersion();
     				String latest = Updates.getLatestVersion();
     				if (latest == null)
     				{
-    					ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't Check for Updates, Check Your Connection");
-    					Updates.setUpdateInfo("true", "", "Couldn't Check for Updates");
+    					ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Couldn't check for updates, check Your Connection");
+    					Updates.setMessage("Couldn't check for updates");
     				}
     				if (latest != null)
     				{
     					if(current.compareTo(latest) < 0) 
     					{
-    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " You are on: " + current);
-    						Updates.setUpdateInfo("true", latest, " New Version:");
+    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There is a new version: " + latest + " you are on: " + current);
+    						Updates.setMessage("New Version is out: " + latest);
     					}
     					if(current.compareTo(latest) == 0)
     					{
-    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
-    						Updates.setUpdateInfo("false", null, null);
+    						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are up to date");
+    						Updates.setMessage("You are up to date");
     					}
     					if(current.compareTo(latest) > 0)
     					{
-    						if (getInstance().getDescription().getVersion().compareTo(Updates.getCurrentVersion()) > 0 || getInstance().getDescription().getVersion().compareTo(Updates.getCurrentVersion()) < 0) 
+    						if (getInstance().getDescription().getVersion().compareTo(Updates.getCompileCurrentVersion()) > 0 || getInstance().getDescription().getVersion().compareTo(Updates.getCompileCurrentVersion()) < 0) 
     						{
     							ProxyServer.getInstance().getLogger().warning(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
-    							Updates.setUpdateInfo("true", latest, " Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/, Latest version is ");
+    							Updates.setMessage("Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/, Latest version is " + latest);
     						}
     						else 
     						{
-        						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are Up to Date");
-        						Updates.setUpdateInfo("false", null, null);
+        						ProxyServer.getInstance().getLogger().info(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You are up to date");
+        						Updates.setMessage("You are up to date");
     						}
     					}
     				}
@@ -177,9 +180,10 @@ public class Main extends Plugin {
 	    }
 	    else
 	    {
-	    	Updates.setUpdateInfo("true", "", "Updates Are Disabled");
+	    	Updates.setMessage("Updates Are disabled");
 	    }
 	    CPS.isEnabled = true;   
+	    Main.OnlineMode = Config.getconfig().getBoolean("network-info.online-mode");
     }
 	public void onDisable()
 	{
@@ -196,7 +200,7 @@ public class Main extends Plugin {
 		}
 		getInstance().getLogger().info("Canceling Scheduled Tasks...");
 		ProxyServer.getInstance().getScheduler().cancel(getInstance());
-		getInstance().getLogger().info(Updates.getCurrentVersion() + " Is now disabled!");
+		getInstance().getLogger().info(Updates.getCompileCurrentVersion() + " Is now disabled!");
 		CPS.isEnabled = false;
 	}
 	public static Main getInstance()

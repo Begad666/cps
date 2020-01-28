@@ -1,21 +1,16 @@
-name: Java CI
+name: Build (v*)
 
 on:
   push:
     branches:
-    - master
     - v*
-  pull_request:
-    branches: 
-      - master
-      - v*
-  
-
 jobs:
   build:
 
-    runs-on: [ubuntu-latest]
-
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v1
     - name: Set up JDK 1.8
@@ -31,3 +26,8 @@ jobs:
           ${{ runner.os }}-maven- 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Upload Jar
+      uses: actions/upload-artifact@v1
+      with:
+        name: CustomProtocolSettings.jar
+        path: target/CustomProtocolSettings-2.0.jar

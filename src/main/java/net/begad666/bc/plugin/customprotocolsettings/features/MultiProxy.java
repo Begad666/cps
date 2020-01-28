@@ -1,5 +1,6 @@
 package net.begad666.bc.plugin.customprotocolsettings.features;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -18,10 +19,9 @@ import java.util.ArrayList;
 public class MultiProxy {
 
     public static void ApplyData(JsonObject configobject, boolean autosaveconfig) {
-        Main.getInstance().getLogger().info("AutoPull data ready, starting config changes");
+        Main.getInstance().getLogger().info("AutoPull data ready, starting config changes...");
         try {
             Config.getconfig().set("update-checker-enabled", configobject.get("update-checker-enabled").getAsBoolean());
-            Config.getconfig().set("password", configobject.get("password").getAsString());
             JsonObject netinfo = configobject.get("network-info").getAsJsonObject();
             Config.getconfig().set("network-info.name", netinfo.get("name").getAsString());
             Config.getconfig().set("network-info.max-players", netinfo.get("max-players").getAsInt());
@@ -63,7 +63,7 @@ public class MultiProxy {
             ArrayList<String> allowed_players = new ArrayList<>();
             JsonArray aps = configobject.get("allowed-players").getAsJsonArray();
             for (int i = 0; i < aps.size(); i++) {
-               allowed_players.add(aps.get(i).getAsString());
+                allowed_players.add(aps.get(i).getAsString());
             }
             Config.getconfig().set("allowed-players", allowed_players);
             if (autosaveconfig) {
@@ -73,8 +73,9 @@ public class MultiProxy {
                     Main.getInstance().getLogger().severe("There was an error while saving the config to file");
                 }
             }
+            Main.getInstance().getLogger().info("Done!");
         } catch (JsonParseException e) {
-            Main.getInstance().getLogger().severe("CustomProtocolSettings: \n*****ERRROR*****\nThere was an error while parsing the config from the database, reloading the config from file, Exception:\n" + e);
+            Main.getInstance().getLogger().severe("\n*****ERROR*****\nThere was an error while parsing the config from the database, reloading the config from file, Exception:\n" + e);
             boolean result = Config.check();
             if (!result) {
                 PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
@@ -83,14 +84,82 @@ public class MultiProxy {
                 return;
             }
             if (Config.getconfig().getBoolean("multiproxy.enable")) {
-                Main.getInstance().getLogger().info("Disconnecting From Database...");
-                DatabaseConnectionManager.disconnect();
-                Main.getInstance().getLogger().info("Reconnecting to Database...");
+                if (DatabaseConnectionManager.getConnected()) {
+                    Main.getInstance().getLogger().info("Disconnecting From Database...");
+                    DatabaseConnectionManager.disconnect();
+                }
+                Main.getInstance().getLogger().info("Connecting to Database...");
                 DatabaseConnectionManager.connect();
             }
             Main.getInstance().getLogger().info("Done reloading from config file");
         }
+    }
 
-
+    public static void PushData() {
+        Main.getInstance().getLogger().info("Started pushing data...");
+        JsonObject configobject = new JsonObject();
+        configobject.addProperty("update-checker-enabled", Config.getconfig().getBoolean("update-checker-enabled"));
+        JsonObject netinfo = new JsonObject();
+        netinfo.addProperty("name", Config.getconfig().getString("network-info.name"));
+        netinfo.addProperty("max-players", Config.getconfig().getInt("network-info.max-players"));
+        configobject.add("network-info", netinfo);
+        JsonObject settings = new JsonObject();
+        ArrayList<Integer> ap = (ArrayList<Integer>)Config.getconfig().getIntList("settings.allowed-protocols");
+        JsonArray allowedprotocols = new JsonArray();
+        for (Integer integer : ap) {
+            allowedprotocols.add(integer);
+        }
+        settings.add("allowed-protocols", allowedprotocols.getAsJsonArray());
+        settings.addProperty("maintenance-enabled", Config.getconfig().getBoolean("settings.maintenance-enabled"));
+        configobject.add("settings", settings);
+        JsonObject motds = new JsonObject();
+        JsonObject defaultmotd = new JsonObject();
+        defaultmotd.addProperty("1", Config.getconfig().getString("motds.default-motd.1"));
+        defaultmotd.addProperty("2", Config.getconfig().getString("motds.default-motd.2"));
+        motds.add("default-motd", defaultmotd);
+        JsonObject maintenancemotd = new JsonObject();
+        maintenancemotd.addProperty("1", Config.getconfig().getString("motds.maintenance-motd.1"));
+        maintenancemotd.addProperty("2", Config.getconfig().getString("motds.maintenance-motd.2"));
+        motds.add("maintenance-motd", maintenancemotd);
+        configobject.add("motds", motds);
+        JsonObject hovermessages = new JsonObject();
+        ArrayList<String> dhm = (ArrayList<String>)Config.getconfig().getStringList("hover-messages.default-hover-message");
+        JsonArray defaulthovermessage = new JsonArray();
+        for (String string : dhm) {
+            defaulthovermessage.add(string);
+        }
+        hovermessages.add("default-hover-message", defaulthovermessage.getAsJsonArray());
+        ArrayList<String> mhm = (ArrayList<String>)Config.getconfig().getStringList("hover-messages.maintenance-hover-message");
+        JsonArray maintenancehovermessage = new JsonArray();
+        for (String string : mhm) {
+            maintenancehovermessage.add(string);
+        }
+        hovermessages.add("maintenance-hover-message", maintenancehovermessage.getAsJsonArray());
+        configobject.add("hover-messages", hovermessages);
+        JsonObject prefixs = new JsonObject();
+        prefixs.addProperty("plugin", Config.getconfig().getString("prefixs.plugin"));
+        prefixs.addProperty("ping", Config.getconfig().getString("prefixs.ping"));
+        configobject.add("prefixs", prefixs);
+        JsonObject messages = new JsonObject();
+        messages.addProperty("not-supported-client-message", Config.getconfig().getString("messages.not-supported-client-message"));
+        messages.addProperty("maintenance-message", Config.getconfig().getString("messages.maintenance-message"));
+        messages.addProperty("full-message", Config.getconfig().getString("messages.full-message"));
+        configobject.add("messages", messages);
+        ArrayList<String> aps = (ArrayList<String>)Config.getconfig().getStringList("allowed-players");
+        JsonArray allowedplayers = new JsonArray();
+        for (String string : aps) {
+            allowedplayers.add(string);
+        }
+        configobject.add("allowed-players", allowedplayers.getAsJsonArray());
+        int result = DatabaseConnectionManager.executeUpdate("DELETE FROM cps WHERE groupid='" + Config.getconfig().getString("multiproxy.groupid") + "'");
+        if (result == 5) {
+            Main.getInstance().getLogger().severe("Cannot delete old rows, canceling pushing");
+            return;
+        }
+        result = DatabaseConnectionManager.executeUpdate("INSERT INTO cps VALUES ('" + Config.getconfig().getString("multiproxy.groupid") +"', '" + new Gson().toJson(configobject) + "')");
+        if (result == 5) {
+            Main.getInstance().getLogger().severe("Cannot insert rows, canceling pushing");
+        }
+        Main.getInstance().getLogger().info("Done!");
     }
 }

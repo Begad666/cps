@@ -72,7 +72,7 @@ public class Main extends Plugin {
 						getInstance().getLogger().warning("No data was found in the database");
 				}, Config.getconfig().getInt("multiproxy.autopulltime"), Config.getconfig().getInt("multiproxy.autopulltime"), TimeUnit.MINUTES);
 		}
-		MetricsLite metrics = new MetricsLite(getInstance());
+		MetricsLite metrics = new MetricsLite(getInstance(), 5145);
 		Updates.setMessage("Please wait...");
 		if (Config.getconfig().getBoolean("update-checker-enabled")) {
 			ScheduledTasks.updatetask1 = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {

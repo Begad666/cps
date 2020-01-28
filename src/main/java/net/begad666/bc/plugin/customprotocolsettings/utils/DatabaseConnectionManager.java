@@ -64,7 +64,7 @@ public class DatabaseConnectionManager {
 			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment, cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statement, cancelling statement execution");
 			return 5;
 		}
 		try {
@@ -73,7 +73,7 @@ public class DatabaseConnectionManager {
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \", cancelling statment execution");
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statement: \" " + StmtToExec + " \", cancelling statement execution");
 			return 5;
 		}
 	}

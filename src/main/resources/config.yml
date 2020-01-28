@@ -2,8 +2,6 @@
 config-version: 'v6'
 #Enable or disable the update checker
 update-checker-enabled: true
-#Password For Superrrrr-Admins commands (NO SPACES)
-password: 'Th3B3stPassw0rdinth3W0r1d'
 
 #Info about your network
 network-info:
@@ -26,8 +24,6 @@ settings:
  server-protocol: 340
 #Is maintenance enabled?
  maintenance-enabled: false
-#Go to allowed-players for more info
- online-mode: true
 
 #MOTDs
 motds:
@@ -50,7 +46,7 @@ hover-messages:
  maintenance-hover-message: 
   - 'Maintenance'
 
-#Prefixs
+#Prefixs (only when executing commands)
 prefixs:
  #Prefix of Plugin
  plugin: '&7[&3CustomProt&6ocolSettings&7]'
@@ -66,8 +62,8 @@ messages:
 #Message when the server is full
  full-message: 'The server is full, try again later'
  
-#Allowed Players to join while (players full or maintenance), UUIDs are supported with online-mode: true servers and player names are supported with online-mode: false servers
-#The plugin uses your server online mode setting to determine that what type to use
+#Allowed Players to (join while players full or maintenance or use super admin commands), UUIDs are supported with online-mode: true servers and player names are supported with online-mode: false servers
+#The plugin uses your server online mode setting to determine what type to use
 allowed-players:
  - 'owner'
  - 'staff1'
@@ -81,7 +77,7 @@ multiproxy:
  groupid: '1'
 #Is Auto Pull Enabled
  autopull: false
-#The time between every pull in minutes
+#The time between every pull in minutes if autopull is enabled
  autopulltime: 3
 #Auto save config when the pull happens? (means that when the server pulls, should it save the config to config file or leave it in memory)
  autosave: false

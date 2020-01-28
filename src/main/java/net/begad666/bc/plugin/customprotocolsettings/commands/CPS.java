@@ -13,6 +13,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -58,25 +59,25 @@ public class CPS extends Command {
 					license(sender);
 					break;
 				case "enable":
-					try {
-						if ((args[1].equals(Config.getconfig().getString("password")))) {
+					if (!(sender instanceof ProxiedPlayer)) {
+						enable(sender);
+					} else {
+						if (Main.OnlineMode ? Config.getconfig().getStringList("allowed-players").contains(((ProxiedPlayer) sender).getUniqueId().toString()) : Config.getconfig().getStringList("allowed-players").contains(sender.getName())) {
 							enable(sender);
 						} else {
-							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The password is wrong, please try again"));
+							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You can't use that command"));
 						}
-					} catch (Exception e) {
-						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 					}
 					break;
 				case "disable":
-					try {
-						if ((args[1].equals(Config.getconfig().getString("password")))) {
+					if (!(sender instanceof ProxiedPlayer)) {
+						disable(sender);
+					} else {
+						if (Main.OnlineMode ? Config.getconfig().getStringList("allowed-players").contains(((ProxiedPlayer) sender).getUniqueId().toString()) : Config.getconfig().getStringList("allowed-players").contains(sender.getName())) {
 							disable(sender);
 						} else {
-							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The password is wrong, please Try Again"));
+							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You can't use that command"));
 						}
-					} catch (Exception e) {
-						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Please type the password"));
 					}
 					break;
 				case "checkdbconnection":
@@ -93,6 +94,17 @@ public class CPS extends Command {
 						sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " MultiProxy Isn't Enabled"));
 					}
 					break;
+				case "push":
+					if (!(sender instanceof ProxiedPlayer)) {
+						push(sender);
+					} else {
+						if (Main.OnlineMode ? Config.getconfig().getStringList("allowed-players").contains(((ProxiedPlayer) sender).getUniqueId().toString()) : Config.getconfig().getStringList("allowed-players").contains(sender.getName())) {
+							push(sender);
+						} else {
+							sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " You can't use that command"));
+						}
+					}
+					break;
 				default:
 					sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Unknown argument"));
 					break;
@@ -107,6 +119,7 @@ public class CPS extends Command {
 			PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
 			pluginManager.unregisterListeners(Main.getInstance());
 			pluginManager.unregisterCommands(Main.getInstance());
+			return;
 		}
 		if (Config.getconfig().getBoolean("multiproxy.enable")) {
 			Main.getInstance().getLogger().info("Disconnecting From Database...");
@@ -195,22 +208,37 @@ public class CPS extends Command {
 	private void pullnow(CommandSender sender) {
 		ResultSet data;
 		Gson gson = new Gson();
-		JsonObject configjson = new JsonObject();
+		JsonObject configjson = null;
 		try {
 			data = DatabaseConnectionManager.executeQuery("SELECT configjson FROM cps WHERE groupId='" + Config.getconfig().getString("multiproxy.groupid") + "'");
 			while (data != null && data.next())
 				configjson = gson.fromJson(data.getString("configjson"), JsonObject.class);
 		} catch (JsonSyntaxException e) {
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while processing pulled json data from database, most likely because there is no data, check your table, no changes will be made"));
+			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while processing pulled json data from database, no changes will be made"));
+			sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while processing pulled json data from database, no changes will be made")));
 			return;
 		} catch (SQLException e) {
 			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Error while pulling data from database, no changes will be made"));
 			return;
 		}
-		if (configjson != null)
+		if (configjson != null) {
+			sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Check the console to know did it work or not, starting process...")));
 			MultiProxy.ApplyData(configjson, Config.getconfig().getBoolean("multiproxy.autosaveconfig"));
-		else
+		} else {
 			sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " No data was found in the database"));
+		}
+	}
+	private void push(CommandSender sender) {
+		if (Config.getconfig().getBoolean("multiproxy.enable")) {
+			if (DatabaseConnectionManager.getConnected()) {
+				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin") + " Check the console to know did it work or not, starting process...")));
+				MultiProxy.PushData();
+			} else {
+				sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The Database Isn't Connected"));
+			}
+		} else {
+			sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " MultiProxy Isn't Enabled"));
+		}
 	}
 
 }

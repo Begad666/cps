@@ -17,6 +17,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.PluginManager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
@@ -131,27 +133,18 @@ public class CPS extends Command {
 	}
 
 	public static void license(CommandSender sender) {
-		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + "\r\nMIT License\r\n" +
-				"\r\n" +
-				"Copyright (c) 2020 Begad666\r\n" +
-				"\r\n" +
-				"Permission is hereby granted, free of charge, to any person obtaining a copy\r\n" +
-				"of this software and associated documentation files (the \"Software\"), to deal\r\n" +
-				"in the Software without restriction, including without limitation the rights\r\n" +
-				"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\n" +
-				"copies of the Software, and to permit persons to whom the Software is\r\n" +
-				"furnished to do so, subject to the following conditions:\r\n" +
-				"\r\n" +
-				"The above copyright notice and this permission notice shall be included in all\r\n" +
-				"copies or substantial portions of the Software.\r\n" +
-				"\r\n" +
-				"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\n" +
-				"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\n" +
-				"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\n" +
-				"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\n" +
-				"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\n" +
-				"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\r\n" +
-				"SOFTWARE."));
+		InputStream inputStream = Main.class.getResourceAsStream("/license.txt");
+		StringBuilder license = new StringBuilder();
+		int character = 0;
+		try {
+			while ((character = inputStream.read()) != -1) {
+				license.append((char) character);
+			}
+		} catch (IOException e) {
+			sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " Cannot read license file"));
+			return;
+		}
+		sender.sendMessage(new TextComponent(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + "\n" + license));
 	}
 
 	private void enable(CommandSender sender) {

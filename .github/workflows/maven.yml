@@ -1,4 +1,4 @@
-name: Build (master and v*)
+name: Java CI
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     - master
 jobs:
   build:
-
-    runs-on: ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
@@ -22,14 +21,13 @@ jobs:
       - name: Retrive Cache
         uses: actions/cache@v1
         with:
-         path: ~/.m2/repository
-         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-         restore-keys: |
-           ${{ runner.os }}-maven-
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Upload Jar
+      - name: Upload Jar (If not failed)
         uses: actions/upload-artifact@v1
+        if: ${{ success() }}
         with:
           name: CustomProtocolSettings
           path: target/CustomProtocolSettings.jar

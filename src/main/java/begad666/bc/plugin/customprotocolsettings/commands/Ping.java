@@ -1,7 +1,7 @@
-package net.begad666.bc.plugin.customprotocolsettings.commands;
+package begad666.bc.plugin.customprotocolsettings.commands;
 
-import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
-import net.begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
+import begad666.bc.plugin.customprotocolsettings.utils.Config;
+import begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;

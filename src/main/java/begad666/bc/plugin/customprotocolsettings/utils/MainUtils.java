@@ -1,4 +1,4 @@
-package net.begad666.bc.plugin.customprotocolsettings.utils;
+package begad666.bc.plugin.customprotocolsettings.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;

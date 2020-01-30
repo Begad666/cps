@@ -1,26 +1,74 @@
-package net.begad666.bc.plugin.customprotocolsettings.features;
+package begad666.bc.plugin.customprotocolsettings.features;
 
+import begad666.bc.plugin.customprotocolsettings.Main;
+import begad666.bc.plugin.customprotocolsettings.utils.Config;
+import begad666.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.begad666.bc.plugin.customprotocolsettings.Main;
-import net.begad666.bc.plugin.customprotocolsettings.utils.Config;
-import net.begad666.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MultiProxy {
 
     public static void ApplyData(JsonObject configobject, boolean autosaveconfig) {
         Main.getInstance().getLogger().info("AutoPull data ready, starting config changes...");
         try {
+            if (Config.getconfig().getBoolean("multiproxy.backup.enable")) {
+                Main.getInstance().getLogger().info("Backing Up config...");
+                File dir = new File(Main.getInstance().getDataFolder() + "/backup");
+                boolean result;
+                boolean cancreate = true;
+                if (!dir.exists()) {
+                    result = dir.mkdir();
+                } else {
+                    result = true;
+                }
+                if (!result) {
+                    if (Config.getconfig().getBoolean("multiproxy.backup.stoponerror")) {
+                        Main.getInstance().getLogger().severe("Cannot create backup folder and stoponerror is true, canceling pulling");
+                        return;
+                    } else {
+                        Main.getInstance().getLogger().severe("Cannot create backup folder, continuing pulling as specified in config");
+                        cancreate = false;
+                    }
+                }
+                if (cancreate) {
+                    Calendar cal = Calendar.getInstance();
+                    File backupfile = new File(dir, Config.getconfig().getString("multiproxy.backup.name").replace("{time}", new SimpleDateFormat("hh_mma").format(cal.getTime())) + ".yml");
+                    File configfile = new File(Main.getInstance().getDataFolder(), "config.yml");
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = new FileInputStream(configfile);
+                    } catch (FileNotFoundException e) {
+                        if (Config.getconfig().getBoolean("multiproxy.backup.stoponerror")) {
+                            Main.getInstance().getLogger().severe("Cannot create backup file and stoponerror is true, canceling pulling");
+                            return;
+                        } else {
+                            Main.getInstance().getLogger().severe("Cannot create backup file, continuing pulling as specified in config");
+                        }
+                    }
+                    try {
+                        Files.copy(inputStream, backupfile.toPath());
+                    } catch (IOException e) {
+                        if (Config.getconfig().getBoolean("multiproxy.backup.stoponerror")) {
+                            Main.getInstance().getLogger().severe("Cannot copy to backup file and stoponerror is true, canceling pulling");
+                            return;
+                        } else {
+                            Main.getInstance().getLogger().severe("Cannot copy to backup file, continuing pulling as specified in config");
+                        }
+                    }
+                }
+            }
             Config.getconfig().set("update-checker-enabled", configobject.get("update-checker-enabled").getAsBoolean());
             JsonObject netinfo = configobject.get("network-info").getAsJsonObject();
             Config.getconfig().set("network-info.name", netinfo.get("name").getAsString());

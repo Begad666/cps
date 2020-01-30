@@ -1,14 +1,14 @@
-package net.begad666.bc.plugin.customprotocolsettings;
+package begad666.bc.plugin.customprotocolsettings;
 
+import begad666.bc.plugin.customprotocolsettings.commands.CPS;
+import begad666.bc.plugin.customprotocolsettings.commands.Ping;
+import begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
+import begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
+import begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
+import begad666.bc.plugin.customprotocolsettings.utils.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.begad666.bc.plugin.customprotocolsettings.commands.CPS;
-import net.begad666.bc.plugin.customprotocolsettings.commands.Ping;
-import net.begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
-import net.begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
-import net.begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
-import net.begad666.bc.plugin.customprotocolsettings.utils.*;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -37,12 +37,13 @@ public class Main extends Plugin {
 			getInstance().getLogger().info("Connecting To Database...");
 			ProxyServer.getInstance().getScheduler().runAsync(getInstance(), () -> {
 				DatabaseConnectionManager.connect();
-				DatabaseConnectionManager.executeUpdate(
-						"CREATE TABLE IF NOT EXISTS `cps` "
-								+ "( `groupId` VARCHAR(25) NOT NULL ,"
-								+ " `configjson` LONGTEXT NOT NULL ,"
-								+ "	PRIMARY KEY (`groupId`)"
-								+ ")");
+				if (DatabaseConnectionManager.getConnected())
+					DatabaseConnectionManager.executeUpdate(
+							"CREATE TABLE IF NOT EXISTS `cps` "
+									+ "( `groupId` VARCHAR(25) NOT NULL ,"
+									+ " `configjson` LONGTEXT NOT NULL ,"
+									+ "	PRIMARY KEY (`groupId`)"
+									+ ")");
 			});
 
 			ScheduledTasks.autoreconnecttask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {

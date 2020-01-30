@@ -1,6 +1,6 @@
-package net.begad666.bc.plugin.customprotocolsettings.utils;
+package begad666.bc.plugin.customprotocolsettings.utils;
 
-import net.begad666.bc.plugin.customprotocolsettings.Main;
+import begad666.bc.plugin.customprotocolsettings.Main;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -13,7 +13,6 @@ import java.nio.file.Files;
 public class Config {
 	private static File file;
 	private static Configuration config;
-	private static String cv = null;
 
 	public static boolean check() {
 		file = new File(Main.getInstance().getDataFolder(), "config.yml");
@@ -21,6 +20,7 @@ public class Config {
 		if (!file.exists()) {
 			return load();
 		} else {
+			String cv;
 			try {
 				cv = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(Main.getInstance().getDataFolder(), "config.yml")).getString("config-version");
 			} catch (IOException e) {

@@ -73,14 +73,25 @@ allowed-players:
 multiproxy:
 #Enable MultiProxy Support
  enable: false
-#ID of the Group
+ #ID of the Group
  groupid: '1'
-#Is Auto Pull Enabled
+ #Is Auto Pull Enabled
  autopull: false
-#The time between every pull in minutes if autopull is enabled
+ #The time between every pull in minutes if autopull is enabled
  autopulltime: 3
-#Auto save config when the pull happens? (means that when the server pulls, should it save the config to config file or leave it in memory)
- autosave: false
+ #Auto save config when the pull happens? (means that when the server pulls, should it save the config to config file or leave it in memory)
+ autosaveconfig: false
+ #Backup config settings
+ backup:
+  #Should the plugin backup the config file when a pull happens
+  enable: false
+  #If so how should the plugin name the file, the plugin will append .yml to the file automatically
+  #Placeholders:
+  # {time} - replaces it with current time e.g. 11_00AM or 3_02PM (_ means :)
+  name: 'backup_config'
+  #The plugin will store backup config in /backup/ in plugin's own directory
+  #Should the plugin stop pulling if the plugin can't create the required directory or backup file
+  stoponerror: true
 
 #The connection settings for the database (Currently MySQL/MariaDB is Supported)
 connectionsettings:

@@ -1,9 +1,9 @@
-package net.begad666.bc.plugin.customprotocolsettings.utils;
+package begad666.bc.plugin.customprotocolsettings.utils;
 
+import begad666.bc.plugin.customprotocolsettings.Main;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.begad666.bc.plugin.customprotocolsettings.Main;
 
 import java.io.BufferedReader;
 import java.io.IOException;

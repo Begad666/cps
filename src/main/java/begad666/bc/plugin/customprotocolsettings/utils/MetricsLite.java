@@ -1,4 +1,4 @@
-package net.begad666.bc.plugin.customprotocolsettings.utils;
+package begad666.bc.plugin.customprotocolsettings.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

@@ -6,23 +6,49 @@ import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainUtils {
+	public static String replaceunicode(String string) {
+		String newstring = "";
+		Collection<String> replace = Config.getconfig().getSection("replace").getKeys();
+		for (String rk : replace) {
+			if (string.contains(rk)) {
+				newstring = string.replace(rk, Config.getconfig().getSection("replace").getString(rk));
+			}
+		}
+		return newstring.equals("") ? newstring : string;
+	}
+
 	public static String replacecodesandcolors(String string) {
-		return ChatColor.translateAlternateColorCodes('&', string.replace(">>", "»")
-				.replace("<<", "«"));
+		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
 	public static String replaceplaceholders(String string) {
 		String max_players = Integer.toString(Config.getconfig().getInt("network-info.max-players"));
 		String online = Integer.toString(ProxyServer.getInstance().getOnlineCount());
-		return string.replace("%online%", online).replace("%max%", max_players);
+		String newstring;
+		newstring = string.replace("%online%", online).replace("%max%", max_players).replace("%net-name%", Config.getconfig().getString("network-info.name"));
+		Matcher matcher = Pattern.compile("%bungee_(.*)%", Pattern.CASE_INSENSITIVE).matcher(newstring);
+		while (matcher.find()) {
+			String server_name = matcher.group(1);
+			if (ProxyServer.getInstance().getServers().containsKey(server_name)) {
+				int size = ProxyServer.getInstance().getServers().get(server_name).getPlayers().size();
+				newstring = newstring.replace("%bungee_" + server_name + "%", Integer.toString(size));
+			} else {
+				newstring = newstring.replace("%bungee_" + server_name + "%", "&4Not Found");
+			}
+		}
+		return newstring;
 	}
 
 	public static String replaceall(String string) {
 		String stringnew;
 		stringnew = replaceplaceholders(string);
 		stringnew = replacecodesandcolors(stringnew);
+		stringnew = replaceunicode(stringnew);
 		return stringnew;
 	}
 
@@ -55,7 +81,7 @@ public class MainUtils {
 		if (list.contains(playerversion))
 			returnedversion = playerversion;
 		else
-			returnedversion = Config.getconfig().getInt("settings.server-protocol");
+			returnedversion = Config.getconfig().getInt("settings.default-protocol");
 		return returnedversion;
 	}
 }

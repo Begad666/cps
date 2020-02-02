@@ -5,104 +5,122 @@ update-checker-enabled: true
 
 #Info about your network
 network-info:
-#The name when there is a not supported client
- name: 'Network'
-#Max Players, used for player count and max player checking
- max-players: 100
+  #The name of the network used in %net-name% placeholder
+  name: 'Network'
+  #The server version when there is a not supported client
+  server-version: "Network 1.12.2 - 1.14.x"
+  #Max Players, used for player count and max player checking
+  max-players: 100
 
 #Settings for the server
 settings:
-#Allowed Protocol, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
- allowed-protocols:
-  - 340
-  - 393
-  - 401
-  - 477
-  - 485
-  - 490
-#Set this as the version of the server (like your server version is 1.12.2 then set this as it)
- server-protocol: 340
-#Is maintenance enabled?
- maintenance-enabled: false
+  #Allowed Protocol, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
+  allowed-protocols:
+    - 340
+    - 393
+    - 401
+    - 477
+    - 485
+    - 490
+  #Protocol sent when the client doesn't match any of the above
+  default-protocol: 340
+  #Is maintenance enabled?
+  maintenance-enabled: false
 
 #MOTDs
 motds:
-#Default MOTD while there is no maintenance on going
- default-motd: 
-  1: '&6Network is &5now open!'
-  2: '&3Come To &aPlay'
-#Oppsite of above
- maintenance-motd:
-  1: 'New Update on maintenance'
-  2: 'Please Wait'
- 
+  #Default MOTD while maintenance isn't enabled
+  default-motd:
+    1: '&6Network is &5now open!'
+    2: '&3Come To &aPlay'
+  #Oppsite of above
+  maintenance-motd:
+    1: 'New Update on maintenance'
+    2: 'Please Wait'
+
 #Hover messages
 hover-messages:
-#Message shown when hovering the mouse over the player count while no maintenance on going
- default-hover-message: 
-  - '&6New Server is here!'
-  - '&3Come and play'
-#Oppsite of the above
- maintenance-hover-message: 
-  - 'Maintenance'
+  #Message shown when hovering the mouse over the player count while maintenance isn't enabled
+  default-hover-message:
+    - 'Network'
+  #Oppsite of the above
+  maintenance-hover-message:
+    - 'Maintenance'
 
 #Prefixs (only when executing commands)
 prefixs:
- #Prefix of Plugin
- plugin: '&7[&3CustomProt&6ocolSettings&7]'
- #Prefix of the Ping Command
- ping: '&7[&3Pi&6ng&7]'
- 
+  #Prefix of Plugin
+  plugin: '&7[&3CustomProt&6ocolSettings&7]'
+  #Prefix of the Ping Command
+  ping: '&7[&3Pi&6ng&7]'
+
 #Messages
 messages:
-#Message when the client doesn't match the allowed protocols above
- not-supported-client-message: 'You are not allowed to use this minecraft version'
-#Message when the client doesn't match the allowed players when there is a maintenance
- maintenance-message: 'We are currently on maintenance, there are %online% staff(s) online in maintenance'
-#Message when the server is full
- full-message: 'The server is full, try again later'
- 
+  #Message when the client doesn't match the allowed protocols above
+  not-supported-client-message: 'You are not allowed to use this minecraft version'
+  #Message when the client doesn't match the allowed players when there is a maintenance
+  maintenance-message: 'We are currently on maintenance, there are %online% staff(s) online in maintenance'
+  #Message when the server is full
+  full-message: 'The server is full, try again later'
+
 #Allowed Players to (join while players full or maintenance or use super admin commands), UUIDs are supported with online-mode: true servers and player names are supported with online-mode: false servers
 #The plugin uses your server online mode setting to determine what type to use
 allowed-players:
- - 'owner'
- - 'staff1'
- - 'staff2'
-
+  - 'owner'
+  - 'staff1'
+  - 'staff2'
+#Backup settings
+backup:
+  #how should the plugin name the file, the plugin will append .yml to the file automatically
+  #Placeholders:
+  # {time} - replaces it with current time e.g. 11_00AM or 3_02PM (here _ means :)
+  # {date} - replaces it with current date e.g. 2020_02_15 (also here _ means /)
+  name: 'backup_{time}'
+  #The plugin will store backup config in /backup/ in plugin's own directory
 #MultiProxy Support
 multiproxy:
-#Enable MultiProxy Support
- enable: false
- #ID of the Group
- groupid: '1'
- #Is Auto Pull Enabled
- autopull: false
- #The time between every pull in minutes if autopull is enabled
- autopulltime: 3
- #Auto save config when the pull happens? (means that when the server pulls, should it save the config to config file or leave it in memory)
- autosaveconfig: false
- #Backup config settings
- backup:
-  #Should the plugin backup the config file when a pull happens
+  #Enable MultiProxy Support
   enable: false
-  #If so how should the plugin name the file, the plugin will append .yml to the file automatically
-  #Placeholders:
-  # {time} - replaces it with current time e.g. 11_00AM or 3_02PM (_ means :)
-  name: 'backup_config'
-  #The plugin will store backup config in /backup/ in plugin's own directory
-  #Should the plugin stop pulling if the plugin can't create the required directory or backup file
-  stoponerror: true
+  #ID of the Group
+  groupid: '1'
+  #Is Auto Pull Enabled
+  autopull: false
+  #The time between every pull in minutes if autopull is enabled
+  autopulltime: 3
+  #Auto save config when the pull happens (means that when the server pulls, should it save the config to config file or leave it in memory)
+  autosaveconfig: false
+  #Should the plugin auto replace unicode characters (go to bottom of the file)
+  autoreplace: true
+  #MultiProxy backup settings
+  backup:
+    #Should the plugin backup the config file when a pull happens
+    enable: false
+    #Should the plugin stop pulling when an error happens when backing up
+    stoponerror: true
 
 #The connection settings for the database (Currently MySQL/MariaDB is Supported)
 connectionsettings:
-#Where the database are hosted
- host: 'localhost'
-#The Port
- port: 3306
-#The Database Name
- database: 'minecraft'
-#The User of the Database
- user: 'root'
-#The User Password
- password: ''
+  #Where the database are hosted
+  host: 'localhost'
+  #The Port
+  port: 3306
+  #The Database Name
+  database: 'minecraft'
+  #The User of the Database
+  user: 'root'
+  #The User Password
+  password: ''
+
+#Replace strings
+#This section used when a unicode characters is found
+replace:
+  u0026: '&'
+  u0025: '%'
+  u0024: '$'
+  u0023: '#'
+  u0022: '"'
+  u0021: '!'
+  u0027: ''''
+  u002F: '/'
+  u002A: '*'
 #Done, go type /cps reload

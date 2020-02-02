@@ -20,7 +20,7 @@ public class ChangePingData implements Listener {
             serverPing.setPlayers(new ServerPing.Players(0, 0, MainUtils.processmaintenancehovermessage()));
             serverPing.setDescriptionComponent(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("motds.maintenance-motd.1") + "\n" + Config.getconfig().getString("motds.maintenance-motd.2"))));
         } else {
-            serverPing.setVersion(new ServerPing.Protocol(Config.getconfig().getString("network-info.name"), MainUtils.processversion(serverPing.getVersion().getProtocol())));
+            serverPing.setVersion(new ServerPing.Protocol(MainUtils.replaceall(Config.getconfig().getString("network-info.server-version")), MainUtils.processversion(serverPing.getVersion().getProtocol())));
             serverPing.setPlayers(new ServerPing.Players(Config.getconfig().getInt("network-info.max-players"), ProxyServer.getInstance().getOnlineCount(), MainUtils.processhovermessage()));
             serverPing.setDescriptionComponent(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("motds.default-motd.1") + "\n" + Config.getconfig().getString("motds.default-motd.2"))));
         }

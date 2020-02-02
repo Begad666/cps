@@ -18,9 +18,10 @@ public class DisconnectNotAllowedUsers implements Listener {
         int protocol = event.getConnection().getVersion();
         ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Config.getconfig().getIntList("settings.allowed-protocols");
         ArrayList<String> allowedplayers = (ArrayList<String>) Config.getconfig().getStringList("allowed-players");
+        int defpro = Config.getconfig().getInt("settings.default-protocol");
         if (Config.getconfig().getBoolean("settings.maintenance-enabled")) {
             if (Main.OnlineMode ? allowedplayers.contains(event.getConnection().getUniqueId().toString()) : allowedplayers.contains(event.getConnection().getName())) {
-                if (allowedprotocols.contains(protocol)) {
+                if (allowedprotocols.contains(protocol) || defpro == protocol) {
                     //Ready to Go
                 } else {
                     event.getConnection().disconnect(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("messages.not-supported-client-message"))));
@@ -35,7 +36,7 @@ public class DisconnectNotAllowedUsers implements Listener {
                 } else {
                     event.getConnection().disconnect(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("messages.full-message"))));
                 }
-                if (allowedprotocols.contains(protocol)) {
+                if (allowedprotocols.contains(protocol) || defpro == protocol) {
                     //Ready to Go
                 } else {
                     event.getConnection().disconnect(new TextComponent(MainUtils.replaceall(Config.getconfig().getString("messages.not-supported-client-message"))));

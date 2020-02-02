@@ -28,17 +28,17 @@ public class Config {
 				return false;
 			}
 			if (cv != null) {
-				if (cv.compareTo(Updates.getCompileConfigVersion()) < 0) {
-					Main.getInstance().getLogger().warning(" Config isn't up-to-date, config will load but some features might break");
+				if (cv.compareTo(Main.updates.getCompileConfigVersion()) < 0) {
+					Main.getInstance().getLogger().warning("Config isn't up-to-date, plugin will load but some features might break");
 					return load();
-				} else if (cv.compareTo(Updates.getCompileConfigVersion()) == 0) {
+				} else if (cv.compareTo(Main.updates.getCompileConfigVersion()) == 0) {
 					return load();
-				} else if (cv.compareTo(Updates.getCompileConfigVersion()) > 0) {
-					Main.getInstance().getLogger().severe(" You are using a version of a config which is higher than this version requires, cannot load the plugin");
+				} else if (cv.compareTo(Main.updates.getCompileConfigVersion()) > 0) {
+					Main.getInstance().getLogger().severe("You are using a version of a config which is higher than this version requires, cannot load the plugin");
 					return false;
 				}
 			} else {
-				Main.getInstance().getLogger().severe(" Cannot access the config version, cannot load the plugin");
+				Main.getInstance().getLogger().severe("Cannot access the config version, cannot load the plugin");
 				return false;
 			}
 		}
@@ -71,7 +71,7 @@ public class Config {
 				config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(Main.getInstance().getDataFolder(), "config.yml"));
 				return true;
 			} catch (IOException e) {
-				Main.getInstance().getLogger().severe("Cannot load the config file, cannot load the plugin, Exception:\n" + e);
+				Main.getInstance().getLogger().severe("Cannot load the config file, cannot load the plugin");
 				return false;
 			}
 		}

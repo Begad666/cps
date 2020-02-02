@@ -1,6 +1,6 @@
 package begad666.bc.plugin.customprotocolsettings.utils;
 
-import net.md_5.bungee.api.ProxyServer;
+import begad666.bc.plugin.customprotocolsettings.Main;
 
 import java.sql.*;
 
@@ -18,27 +18,27 @@ public class DatabaseConnectionManager {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " The MySQL driver was not found, cancelling mysql connection");
+				Main.getInstance().getLogger().severe("The MySQL driver was not found, cancelling mysql connection");
 				return;
 			}
 			try {
 				connection = DriverManager.getConnection("jdbc:mysql://" + Config.getconfig().getString("connectionsettings.host") + ":" + Config.getconfig().getInt("connectionsettings.port") + "/" + Config.getconfig().getString("connectionsettings.database"), Config.getconfig().getString("connectionsettings.user"), Config.getconfig().getString("connectionsettings.password"));
 			} catch (SQLException e) {
 				e.printStackTrace();
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error establishing connection to the database, cancelling mysql connection");
+				Main.getInstance().getLogger().severe("There was an error establishing connection to the database, cancelling mysql connection");
 				return;
 			}
 			try {
 				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while finishing up connection, disconnecting from database");
+				Main.getInstance().getLogger().severe("There was an error while finishing up connection, disconnecting from database");
 				try {
 					connection.abort(command -> {
 
 					});
 				} catch (SQLException severeerror) {
-					ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " *****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666-mc-works/cps \nException:\n" + severeerror);
+					Main.getInstance().getLogger().severe("*****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666/cps \nException:\n" + severeerror);
 				}
 				return;
 			}
@@ -53,7 +53,7 @@ public class DatabaseConnectionManager {
 
 				});
 			} catch (SQLException e) {
-				ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " *****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666-mc-works/cps \nException:\n" + e);
+				Main.getInstance().getLogger().severe("*****ERROR*****\nCannot Disconnect from the database, report it to https://github.com/begad666/cps \nException:\n" + e);
 			}
 			isConnected = false;
 		}
@@ -64,7 +64,7 @@ public class DatabaseConnectionManager {
 			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statement, cancelling statement execution");
+			Main.getInstance().getLogger().severe("There was an error while creating new statement, cancelling statement execution");
 			return 5;
 		}
 		try {
@@ -73,7 +73,7 @@ public class DatabaseConnectionManager {
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statement: \" " + StmtToExec + " \", cancelling statement execution");
+			Main.getInstance().getLogger().severe("There was an error while executing statement: \" " + StmtToExec + " \", cancelling statement execution");
 			return 5;
 		}
 	}
@@ -83,7 +83,7 @@ public class DatabaseConnectionManager {
 			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while creating new statment, cancelling statment execution");
+			Main.getInstance().getLogger().severe("There was an error while creating new statement, cancelling statement execution");
 			return null;
 		}
 		try {
@@ -92,7 +92,7 @@ public class DatabaseConnectionManager {
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			ProxyServer.getInstance().getLogger().severe(MainUtils.replacecodesandcolors(Config.getconfig().getString("prefixs.plugin")) + " There was an error while executing statment: \" " + StmtToExec + " \", cancelling statment execution");
+			Main.getInstance().getLogger().severe("There was an error while executing statment: \" " + StmtToExec + " \", cancelling statment execution");
 			return null;
 		}
 	}

@@ -19,7 +19,7 @@ public class MainUtils {
 				newstring = string.replace(rk, Config.getconfig().getSection("replace").getString(rk));
 			}
 		}
-		return newstring == "" ? newstring : string;
+		return !newstring.equals("") ? newstring : string;
 	}
 
 	public static String replacecodesandcolors(String string) {

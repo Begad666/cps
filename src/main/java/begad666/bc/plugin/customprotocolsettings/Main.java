@@ -24,7 +24,7 @@ public class Main extends Plugin {
 
 	public void onEnable() {
 		instance = this;
-		updates = new Updates("CustomProtocolSettings", "69385", "v6", "v2.0");
+		updates = new Updates("CustomProtocolSettings", "69385", "v6", "v2.0.1");
 		getInstance().getLogger().info("Started Enable Process");
 		getInstance().getLogger().info("Loading Config...");
 		boolean result = Config.check();

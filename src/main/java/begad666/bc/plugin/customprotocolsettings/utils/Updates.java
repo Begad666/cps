@@ -23,12 +23,12 @@ public class Updates {
 		PluginID = pluginID;
 		ConfigVersion = configVersion;
 		CurrentVersion = currentVersion;
-		Link = "https://api.spiget.org/v2/resources/" + PluginID + "/versions/latest?";
+		Link = "https://api.spiget.org/v2/resources/" + PluginID + "/";
 	}
 
 	public JsonObject getInfo() {
 		try {
-			URL url = new URL(Link + System.currentTimeMillis());
+			URL url = new URL(Link + "versions/latest?" + System.currentTimeMillis());
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setUseCaches(true);
 			connection.addRequestProperty("User-Agent", PluginName + " Plugin Updater | " + getCompileCurrentVersion());
@@ -56,7 +56,7 @@ public class Updates {
 
 	public String getLatestVersion() {
 		try {
-			URL url = new URL(Link + System.currentTimeMillis());
+			URL url = new URL(Link + "versions/latest?" + System.currentTimeMillis());
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setUseCaches(true);
 			connection.addRequestProperty("User-Agent", PluginName + " Plugin Updater | " + getCompileCurrentVersion());

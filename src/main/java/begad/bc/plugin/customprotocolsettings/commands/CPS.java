@@ -1,11 +1,11 @@
-package begad666.bc.plugin.customprotocolsettings.commands;
+package begad.bc.plugin.customprotocolsettings.commands;
 
 
-import begad666.bc.plugin.customprotocolsettings.Main;
-import begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
-import begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
-import begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
-import begad666.bc.plugin.customprotocolsettings.utils.*;
+import begad.bc.plugin.customprotocolsettings.Main;
+import begad.bc.plugin.customprotocolsettings.features.ChangePingData;
+import begad.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
+import begad.bc.plugin.customprotocolsettings.features.MultiProxy;
+import begad.bc.plugin.customprotocolsettings.utils.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;

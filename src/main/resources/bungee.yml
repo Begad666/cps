@@ -1,5 +1,5 @@
 name: CustomProtocolSettings
 version: v2.0.1
-main: begad666.bc.plugin.customprotocolsettings.Main
-author: Begad666
+main: begad.bc.plugin.customprotocolsettings.Main
+author: begad
 description: Custom Ping Data

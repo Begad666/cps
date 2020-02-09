@@ -1,6 +1,6 @@
-package begad666.bc.plugin.customprotocolsettings.utils;
+package begad.bc.plugin.customprotocolsettings.utils;
 
-import begad666.bc.plugin.customprotocolsettings.Main;
+import begad.bc.plugin.customprotocolsettings.Main;
 
 import java.io.*;
 import java.nio.file.Files;

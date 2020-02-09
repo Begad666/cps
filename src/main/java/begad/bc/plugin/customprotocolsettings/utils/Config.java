@@ -1,6 +1,6 @@
-package begad666.bc.plugin.customprotocolsettings.utils;
+package begad.bc.plugin.customprotocolsettings.utils;
 
-import begad666.bc.plugin.customprotocolsettings.Main;
+import begad.bc.plugin.customprotocolsettings.Main;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;

@@ -1,11 +1,11 @@
-package begad666.bc.plugin.customprotocolsettings;
+package begad.bc.plugin.customprotocolsettings;
 
-import begad666.bc.plugin.customprotocolsettings.commands.CPS;
-import begad666.bc.plugin.customprotocolsettings.commands.Ping;
-import begad666.bc.plugin.customprotocolsettings.features.ChangePingData;
-import begad666.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
-import begad666.bc.plugin.customprotocolsettings.features.MultiProxy;
-import begad666.bc.plugin.customprotocolsettings.utils.*;
+import begad.bc.plugin.customprotocolsettings.commands.CPS;
+import begad.bc.plugin.customprotocolsettings.commands.Ping;
+import begad.bc.plugin.customprotocolsettings.features.ChangePingData;
+import begad.bc.plugin.customprotocolsettings.features.DisconnectNotAllowedUsers;
+import begad.bc.plugin.customprotocolsettings.features.MultiProxy;
+import begad.bc.plugin.customprotocolsettings.utils.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -24,7 +24,7 @@ public class Main extends Plugin {
 
 	public void onEnable() {
 		instance = this;
-		updates = new Updates("CustomProtocolSettings", "69385", "v6", "v2.0.1");
+		updates = new Updates(getInstance(), "CustomProtocolSettings", "69385", "v6", "v2.0.1");
 		getInstance().getLogger().info("Started Enable Process");
 		getInstance().getLogger().info("Loading Config...");
 		boolean result = Config.check();
@@ -79,22 +79,19 @@ public class Main extends Plugin {
 		updates.setMessage("Please wait...");
 		if (Config.getconfig().getBoolean("update-checker-enabled")) {
 			ScheduledTasks.updatetask1 = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {
-				String current = updates.getCompileCurrentVersion();
+				String current = getInstance().getDescription().getVersion();
 				String latest = updates.getLatestVersion();
 				if (latest == null) {
 					getInstance().getLogger().warning("Couldn't check for updates, check your connection");
 					updates.setMessage("Couldn't check for updates");
-				}
-				if (latest != null) {
+				} else {
 					if (current.compareTo(latest) < 0) {
-						getInstance().getLogger().info("There is a new version: " + latest + " you are on: " + current);
-						updates.setMessage("New version is out: " + latest);
-					}
-					if (current.compareTo(latest) == 0) {
+						getInstance().getLogger().info("There is a new version: " + latest + ", you are on: " + current);
+						updates.setMessage("New version: " + latest);
+					} else if (current.compareTo(latest) == 0) {
 						getInstance().getLogger().info("You are up to date");
 						updates.setMessage("You are up to date");
-					}
-					if (current.compareTo(latest) > 0) {
+					} else if (current.compareTo(latest) > 0) {
 						if (getInstance().getDescription().getVersion().compareTo(updates.getCompileCurrentVersion()) > 0 || getInstance().getDescription().getVersion().compareTo(updates.getCompileCurrentVersion()) < 0) {
 							getInstance().getLogger().warning("Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/");
 							updates.setMessage("Some of the plugin files are changed, reinstall the plugin from https://www.spigotmc.org/resources/customprotocolsettings.69385/, Latest version is " + latest);

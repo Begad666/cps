@@ -1,10 +1,10 @@
-package begad666.bc.plugin.customprotocolsettings.features;
+package begad.bc.plugin.customprotocolsettings.features;
 
-import begad666.bc.plugin.customprotocolsettings.Main;
-import begad666.bc.plugin.customprotocolsettings.utils.Backup;
-import begad666.bc.plugin.customprotocolsettings.utils.Config;
-import begad666.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
-import begad666.bc.plugin.customprotocolsettings.utils.MainUtils;
+import begad.bc.plugin.customprotocolsettings.Main;
+import begad.bc.plugin.customprotocolsettings.utils.Backup;
+import begad.bc.plugin.customprotocolsettings.utils.Config;
+import begad.bc.plugin.customprotocolsettings.utils.DatabaseConnectionManager;
+import begad.bc.plugin.customprotocolsettings.utils.MainUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

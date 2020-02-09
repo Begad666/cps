@@ -1,4 +1,4 @@
-package begad666.bc.plugin.customprotocolsettings.utils;
+package begad.bc.plugin.customprotocolsettings.utils;
 
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 

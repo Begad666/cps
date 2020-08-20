@@ -1,0 +1,84 @@
+plugin:
+  done: "Done"
+  reload: "Reloading..."
+
+commands:
+  cps:
+    not-found-use-help: "Command not found, use /cps help for all commands"
+    not-allowed: "You can't use that command"
+    help:
+      title: "Help (CR means you will need to be on allowed-players config section or have cps.bypass permission, the check is based on settings.check-type config section)"
+      help: " - Shows this help"
+    reload:
+      help: " - Reloads the config from the file without restarting BungeeCord "
+    pull:
+      help: " - Pulls config data from the database and processes it "
+    push:
+      help: " - Pushes current config data to the database "
+    dbconnected:
+      help: " - Sends what state is the database connection"
+      connected: "Connected"
+      disconnected: "Disconnected"
+    createbackup:
+      help: " - Creates a config backup "
+    loadbackup:
+      help: " <file name> - Loads the backup with that name, no need for adding .yml at the end "
+    default:
+      compile-version: "Compile Version: "
+      current-version: "Version: "
+      compile-config-version: "Compile Config Version: "
+      current-config-version: "Config Version: "
+      updates: "Updates: "
+      plugin-page-click: "Plugin Page: Click Here"
+      plugin-page-link: "Plugin Page: "
+  ping:
+    help: " [player name] - The name describes it all"
+    own: "Your ping is "
+    error-not-player: "You must be a player"
+    others: " ping is "
+    error-not-online: "That player is not online"
+
+backup:
+  start: "Creating backup..."
+  done: "Done backing up config"
+  error-directory-create: "Cannot create directory for backups, canceling backup"
+  error-file-write: "Cannot write to the backup file, canceling backup"
+  error-config-not-found: "Cannot find the config file, is the file there?, canceling backup"
+  load:
+    done: "Done loading config backup"
+    error-args: "Please provide a file name"
+    error-no-directory-cannot-create: "No backup directory is available and couldn't create backup directory"
+    directory-create-no-files: "Directory created but no backup files"
+    error-not-found: "No file with that name was found"
+    error-file-write: "Cannot write to config file"
+
+checker:
+  perm: "Using permission checking"
+  allowed-players-uuid: "Using UUID for checking with allowed-players config section"
+  allowed-players-username: "Using username for checking with allowed-players config section"
+  error-perm: "Couldn't process settings.check-type, using permission checking (default)"
+
+database:
+  #When an database error occurs
+  statement-execute-error: "Couldn't execute statement"
+  not-connected: "Not connected to the database"
+
+multiproxy:
+  pull:
+    start: "Pulling..."
+    error-no-data: "No data available"
+    error-process-data: "Error processing data"
+    backup:
+      error-directory-create: "Cannot create directory for backups, canceling pull"
+      error-file-write: "Cannot write to the backup file, canceling pull"
+      done: "Done"
+  push:
+    start: "Pushing..."
+    done: "Done"
+
+updates:
+  up-to-date: "You are up to date"
+  new: "New version: "
+  error-check: "Couldn't check for updates"
+  error-changed: "Some of the plugin files are changed, reinstall the plugin from "
+  disabled: "Updates are disabled"

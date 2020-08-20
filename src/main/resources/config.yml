@@ -1,7 +1,9 @@
 #Config Version
-config-version: 'v6'
+config-version: 'v7'
 #Enable or disable the update checker
 update-checker-enabled: true
+#Set the current language
+language: 'en'
 
 #Info about your network
 network-info:
@@ -9,23 +11,29 @@ network-info:
   name: 'Network'
   #The server version when there is a not supported client
   server-version: "Network 1.12.2 - 1.14.x"
-  #Max Players, used for player count and max player checking
+  #The server version when maintenance mode is enabled
+  maintenance-version: "Maintenance"
+  #Max Players, used for player count and max player checking, set to 0 for 1 slot added when a player pings
   max-players: 100
 
 #Settings for the server
 settings:
   #Allowed Protocol, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
   allowed-protocols:
-    - 340
-    - 393
-    - 401
-    - 477
-    - 485
-    - 490
+    - 735
+    - 736
+    - 751
   #Protocol sent when the client doesn't match any of the above
-  default-protocol: 340
+  default-protocol: 751
   #Is maintenance enabled?
   maintenance-enabled: false
+  #Should the plugin enable /ping command?
+  ping-enabled: true
+  #How should the plugin check if a player can join while in maintenance or perform super admin commands
+  #Available options are: PERM for permission based (cps.bypass), CONFIG_ALLOWED_PLAYERS for allowed-players config section (go down), default is PERM
+  #PERM Based can only be tested AFTER the player has logged in
+  #CONFIG_ALLOWED_PLAYERS Based can be tested BEFORE and AFTER the player has logged in (More info down at allowed-players section)
+  check-type: PERM
 
 #MOTDs
 motds:
@@ -47,12 +55,8 @@ hover-messages:
   maintenance-hover-message:
     - 'Maintenance'
 
-#Prefixs (only when executing commands)
-prefixs:
-  #Prefix of Plugin
-  plugin: '&7[&3CustomProt&6ocolSettings&7]'
-  #Prefix of the Ping Command
-  ping: '&7[&3Pi&6ng&7]'
+#Prefix of Plugin
+plugin-prefix: '&7[&3CustomProt&6ocolSettings&7]'
 
 #Messages
 messages:
@@ -65,16 +69,23 @@ messages:
 
 #Allowed Players to (join while players full or maintenance or use super admin commands), UUIDs are supported with online-mode: true servers and player names are supported with online-mode: false servers
 #The plugin uses your server online mode setting to determine what type to use
+#Also, if online mode is true then the plugin will check after the player has logged in using UUID, otherwise before (but will use username)
 allowed-players:
   - 'owner'
   - 'staff1'
   - 'staff2'
 #Backup settings
 backup:
+  #Where to place the backup (relative to the plugin data directory)
+  #For example, if you have installed bungeecord at /servers/proxy or C:\server\proxy
+  #if you want to store backups at /servers/proxy/backups/cps
+  #then you will need to set this to "../../backups/cps"
+  folder: 'backup'
   #how should the plugin name the file, the plugin will append .yml to the file automatically
   #Placeholders:
   # {time} - replaces it with current time e.g. 11_00AM or 3_02PM (here _ means :)
-  # {date} - replaces it with current date e.g. 2020_02_15 (also here _ means /)
+  # {date} - replaces it with current date e.g. 02_15_2020 (also here _ means /)
+  # those placeholders will use the server time zone
   name: 'backup_{time}'
   #The plugin will store backup config in /backup/ in plugin's own directory
 #MultiProxy Support
@@ -83,10 +94,6 @@ multiproxy:
   enable: false
   #ID of the Group
   groupid: '1'
-  #Is Auto Pull Enabled
-  autopull: false
-  #The time between every pull in minutes if autopull is enabled
-  autopulltime: 3
   #Auto save config when the pull happens (means that when the server pulls, should it save the config to config file or leave it in memory)
   autosaveconfig: false
   #Should the plugin auto replace unicode characters (go to bottom of the file)
@@ -94,7 +101,7 @@ multiproxy:
   #MultiProxy backup settings
   backup:
     #Should the plugin backup the config file when a pull happens
-    enable: false
+    enable: true
     #Should the plugin stop pulling when an error happens when backing up
     stoponerror: true
 
@@ -102,7 +109,7 @@ multiproxy:
 connectionsettings:
   #Where the database are hosted
   host: 'localhost'
-  #The Port
+  #The Port (usually 3306)
   port: 3306
   #The Database Name
   database: 'minecraft'
@@ -112,7 +119,7 @@ connectionsettings:
   password: ''
 
 #Replace strings
-#This section used when a unicode characters is found
+#This section used when a unicode characters is found (Won't get added into the database if using multiproxy)
 replace:
   u0026: '&'
   u0025: '%'

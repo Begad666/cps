@@ -18,6 +18,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+          server-id: github
+          settings-path: ${{ github.workspace }}
       - name: Retrive Cache
         uses: actions/cache@v1
         with:
@@ -25,6 +27,8 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+        env:
+         GITHUB_TOKEN: ${{ github.token }}
       - name: Upload Jar (If not failed)
         if: success()
         uses: actions/upload-artifact@v1

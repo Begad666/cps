@@ -1,5 +1,7 @@
 name: CustomProtocolSettings
-version: v2.0.1
-main: begad.bc.plugin.customprotocolsettings.Main
+version: v3
+main: begad.mc.bc.plugin.cps.Core
 author: begad
-description: Custom Ping Data
+description: Advanced ServerList and Maintenance plugin
+depends:
+  - CoreAPI

@@ -41,7 +41,7 @@ public class Core extends Plugin {
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v7", "v3", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v7", "v4.0.0", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 

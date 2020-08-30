@@ -7,8 +7,9 @@ assignees: ''
 
 ---
 
-**Config**
-Write a link to the file here
+**Config** Write a link to the file here.
+
+**Console Log** Write a link to the console output to help find the problem.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.

@@ -21,7 +21,7 @@ public class Checker {
                 throw new NullPointerException("player Cannot be null");
             }
         } else {
-            ArrayList<String> allowedPlayers = (ArrayList) Core.getConfig().get().getStringList("allowed-players");
+            ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
             if (player != null) {
                 return Core.OnlineMode ? allowedPlayers.contains(player.getUniqueId().toString()) : allowedPlayers.contains(player.getName());
             } else {
@@ -34,7 +34,7 @@ public class Checker {
         if (Type == CheckType.PERM) {
             throw new IllegalComponentStateException("Cannot check a permission on a connection");
         } else {
-            ArrayList<String> allowedplayers = (ArrayList) Core.getConfig().get().getStringList("allowed-players");
+            ArrayList<String> allowedplayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
             if (pendingConnection != null) {
                 return Core.OnlineMode ? allowedplayers.contains(pendingConnection.getUniqueId().toString()) : allowedplayers.contains(pendingConnection.getName());
             } else {

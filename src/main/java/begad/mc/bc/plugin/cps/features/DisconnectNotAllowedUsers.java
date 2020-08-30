@@ -25,33 +25,28 @@ public class DisconnectNotAllowedUsers {
         public PermBased() {
         }
 
-        @EventHandler(
-                priority = 32
-        )
+        @EventHandler
         public void afterLoginChecks(PostLoginEvent event) {
-            int protocol = event.getPlayer().getPendingConnection().getVersion();
-            ArrayList<Integer> allowedprotocols = (ArrayList) Core.getConfig().get().getIntList("settings.allowed-protocols");
-            int defpro = Core.getConfig().get().getInt("settings.default-protocol");
+            if (!Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
+                int protocol = event.getPlayer().getPendingConnection().getVersion();
+                ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");
+                int defpro = Core.getConfig().get().getInt("settings.default-protocol");
+                if (!allowedprotocols.contains(protocol) && defpro != protocol) {
+                    event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
+                    return;
+                }
+            }
             if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
-                if (Checker.checkPlayer(event.getPlayer())) {
-                    if (!allowedprotocols.contains(protocol) && defpro != protocol) {
-                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
-                    }
-                } else {
+                if (!Checker.checkPlayer(event.getPlayer())) {
                     event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                 }
-            } else if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
-                if (Checker.checkPlayer(event.getPlayer())) {
-                    if (!allowedprotocols.contains(protocol) && defpro != protocol) {
-                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
+            } else {
+                if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                    if (!Checker.checkPlayer(event.getPlayer())) {
+                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                     }
-                } else {
-                    event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                 }
-            } else if (!allowedprotocols.contains(protocol) && defpro != protocol) {
-                event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
             }
-
         }
     }
 
@@ -63,31 +58,28 @@ public class DisconnectNotAllowedUsers {
             public UUIDBased() {
             }
 
-            @EventHandler(
-                    priority = 32
-            )
+            @EventHandler
             public void afterLoginChecks(PostLoginEvent event) {
-                int protocol = event.getPlayer().getPendingConnection().getVersion();
-                ArrayList<Integer> allowedprotocols = (ArrayList) Core.getConfig().get().getIntList("settings.allowed-protocols");
-                int defpro = Core.getConfig().get().getInt("settings.default-protocol");
-                if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
-                    if (Checker.checkPlayer(event.getPlayer())) {
-                        if (!allowedprotocols.contains(protocol) && defpro != protocol) {
-                            event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
-                        }
-                    } else {
-                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
-                    }
-                } else if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
-                    if (!Checker.checkPlayer(event.getPlayer())) {
-                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
-                    }
-
+                if (!Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
+                    int protocol = event.getPlayer().getPendingConnection().getVersion();
+                    ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");
+                    int defpro = Core.getConfig().get().getInt("settings.default-protocol");
                     if (!allowedprotocols.contains(protocol) && defpro != protocol) {
                         event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
+                        return;
                     }
                 }
-
+                if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
+                    if (!Checker.checkPlayer(event.getPlayer())) {
+                        event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
+                    }
+                } else {
+                    if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                        if (!Checker.checkPlayer(event.getPlayer())) {
+                            event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
+                        }
+                    }
+                }
             }
         }
 
@@ -95,31 +87,28 @@ public class DisconnectNotAllowedUsers {
             public UsernameBased() {
             }
 
-            @EventHandler(
-                    priority = 32
-            )
+            @EventHandler
             public void beforeLoginChecks(PreLoginEvent event) {
-                int protocol = event.getConnection().getVersion();
-                ArrayList<Integer> allowedprotocols = (ArrayList) Core.getConfig().get().getIntList("settings.allowed-protocols");
-                int defpro = Core.getConfig().get().getInt("settings.default-protocol");
-                if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
-                    if (Checker.checkConnection(event.getConnection())) {
-                        if (!allowedprotocols.contains(protocol) && defpro != protocol) {
-                            event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
-                        }
-                    } else {
-                        event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
-                    }
-                } else if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
-                    if (!Checker.checkConnection(event.getConnection())) {
-                        event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
-                    }
-
+                if (!Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
+                    int protocol = event.getConnection().getVersion();
+                    ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");
+                    int defpro = Core.getConfig().get().getInt("settings.default-protocol");
                     if (!allowedprotocols.contains(protocol) && defpro != protocol) {
                         event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.not-supported-client-message"))));
+                        return;
                     }
                 }
-
+                if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
+                    if (!Checker.checkConnection(event.getConnection())) {
+                        event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
+                    }
+                } else {
+                    if (ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                        if (!Checker.checkConnection(event.getConnection())) {
+                            event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
+                        }
+                    }
+                }
             }
         }
     }

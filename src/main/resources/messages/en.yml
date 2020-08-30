@@ -56,7 +56,7 @@ checker:
   perm: "Using permission checking"
   allowed-players-uuid: "Using UUID for checking with allowed-players config section"
   allowed-players-username: "Using username for checking with allowed-players config section"
-  error-perm: "Couldn't process settings.check-type, using permission checking (default)"
+  error-perm: "Cannot process settings.check-type, using permission checking (default)"
 
 database:
   #When an database error occurs
@@ -67,13 +67,16 @@ multiproxy:
   pull:
     start: "Pulling..."
     error-no-data: "No data available"
-    error-process-data: "Error processing data"
+    error-file-write: "Cannot write to the config file"
+    done: "Done, Reloading..."
     backup:
       error-directory-create: "Cannot create directory for backups, canceling pull"
       error-file-write: "Cannot write to the backup file, canceling pull"
       done: "Done"
   push:
     start: "Pushing..."
+    error-config-not-found: "Cannot find the config file, is the file there?"
+    error-config-read-file: "Cannot read the config file"
     done: "Done"
 
 updates:

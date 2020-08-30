@@ -1,5 +1,5 @@
 #Config Version
-config-version: 'v7'
+config-version: 'v8.0.0'
 #Enable or disable the update checker
 update-checker-enabled: true
 #Set the current language
@@ -10,7 +10,7 @@ network-info:
   #The name of the network used in %net-name% placeholder
   name: 'Network'
   #The server version when there is a not supported client
-  server-version: "Network 1.12.2 - 1.14.x"
+  server-version: "Network 1.16.x"
   #The server version when maintenance mode is enabled
   maintenance-version: "Maintenance"
   #Max Players, used for player count and max player checking, set to 0 for 1 slot added when a player pings
@@ -18,12 +18,14 @@ network-info:
 
 #Settings for the server
 settings:
-  #Allowed Protocol, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
+  #Should the plugin block users not allowed by the list below?
+  allow-all-versions: false
+  #Allowed protocols versions to join, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
   allowed-protocols:
     - 735
     - 736
     - 751
-  #Protocol sent when the client doesn't match any of the above
+  #Protocol sent when the client doesn't match any of the above (Better to be the proxy server protocol)
   default-protocol: 751
   #Is maintenance enabled?
   maintenance-enabled: false
@@ -41,17 +43,21 @@ motds:
   default-motd:
     1: '&6Network is &5now open!'
     2: '&3Come To &aPlay'
-  #Oppsite of above
+  #Opposite of above
   maintenance-motd:
     1: 'New Update on maintenance'
     2: 'Please Wait'
 
 #Hover messages
 hover-messages:
+  #Enable hover messages
+  enable: true
+  #Display player names instead of using the messages below
+  show-players: false
   #Message shown when hovering the mouse over the player count while maintenance isn't enabled
   default-hover-message:
     - 'Network'
-  #Oppsite of the above
+  #Opposite of the above
   maintenance-hover-message:
     - 'Maintenance'
 
@@ -87,15 +93,12 @@ backup:
   # {date} - replaces it with current date e.g. 02_15_2020 (also here _ means /)
   # those placeholders will use the server time zone
   name: 'backup_{time}'
-  #The plugin will store backup config in /backup/ in plugin's own directory
 #MultiProxy Support
 multiproxy:
   #Enable MultiProxy Support
   enable: false
   #ID of the Group
   groupid: '1'
-  #Auto save config when the pull happens (means that when the server pulls, should it save the config to config file or leave it in memory)
-  autosaveconfig: false
   #Should the plugin auto replace unicode characters (go to bottom of the file)
   autoreplace: true
   #MultiProxy backup settings

@@ -1,5 +1,5 @@
 name: CustomProtocolSettings
-version: v3
+version: v4.0.0
 main: begad.mc.bc.plugin.cps.Core
 author: begad
 description: Advanced ServerList and Maintenance plugin

@@ -6,6 +6,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +24,8 @@ public class Utils {
         String old = string;
         Collection<String> replace = Core.getConfig().get().getSection("replace").getKeys();
 
-        for (Iterator stringIterator = replace.iterator(); stringIterator.hasNext(); newstring = old) {
-            String rk = (String) stringIterator.next();
+        for (Iterator<String> stringIterator = replace.iterator(); stringIterator.hasNext(); newstring = old) {
+            String rk = stringIterator.next();
             old = old.replace(rk, Core.getConfig().get().getSection("replace").getString(rk));
         }
 
@@ -61,29 +62,54 @@ public class Utils {
     }
 
     public static PlayerInfo[] getHoverMessage() {
-        ArrayList<String> list = (ArrayList) Core.getConfig().get().getStringList("hover-messages.default-hover-message");
-        PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+        if (!Core.getConfig().get().getBoolean("hover-messages.show-players")) {
+            ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
+            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
 
-        for (int i = 0; i < hovermessage.length; ++i) {
-            hovermessage[i] = new PlayerInfo(replaceColorCodes(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
+            for (int i = 0; i < hovermessage.length; ++i) {
+                hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
+            }
+
+            return hovermessage;
+        } else {
+            ArrayList<String> list = (ArrayList<String>) Core.getConfig().get().getStringList("hover-messages.default-hover-message");
+            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+
+            for (int i = 0; i < hovermessage.length; ++i) {
+                hovermessage[i] = new PlayerInfo(replaceEveryThing(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
+            }
+
+            return hovermessage;
         }
-
-        return hovermessage;
     }
 
     public static PlayerInfo[] getMaintenanceHoverMessage() {
-        ArrayList<String> list = (ArrayList) Core.getConfig().get().getStringList("hover-messages.maintenance-hover-message");
-        PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+        if (!Core.getConfig().get().getBoolean("hover-messages.show-players")) {
+            ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
+            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
 
-        for (int i = 0; i < hovermessage.length; ++i) {
-            hovermessage[i] = new PlayerInfo(replaceColorCodes(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
+            for (int i = 0; i < hovermessage.length; ++i) {
+                hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
+            }
+
+            return hovermessage;
+        } else {
+            ArrayList<String> list = (ArrayList<String>) Core.getConfig().get().getStringList("hover-messages.maintenance-hover-message");
+            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+
+            for (int i = 0; i < hovermessage.length; ++i) {
+                hovermessage[i] = new PlayerInfo(replaceEveryThing(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
+            }
+
+            return hovermessage;
         }
-
-        return hovermessage;
     }
 
     public static int getVersion(int playerversion) {
-        ArrayList<Integer> list = (ArrayList) Core.getConfig().get().getIntList("settings.allowed-protocols");
+        if (Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
+            return playerversion;
+        }
+        ArrayList<Integer> list = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");
         int returnedversion;
         if (list.contains(playerversion)) {
             returnedversion = playerversion;

@@ -37,7 +37,7 @@ public class Utils {
     }
 
     public static String replacePlaceHolders(String string) {
-        String max_players = Integer.toString(Core.getConfig().get().getInt("network-info.max-players"));
+        String max_players = Integer.toString(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : ProxyServer.getInstance().getOnlineCount() + 1);
         String online = Integer.toString(ProxyServer.getInstance().getOnlineCount());
         String newstring = string.replace("%online%", online).replace("%max%", max_players).replace("%net-name%", Core.getConfig().get().getString("network-info.name"));
         Matcher matcher = Pattern.compile("%bungee_(.*):players%").matcher(newstring);

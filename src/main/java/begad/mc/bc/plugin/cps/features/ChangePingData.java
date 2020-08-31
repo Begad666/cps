@@ -24,7 +24,7 @@ public class ChangePingData implements Listener {
             serverPing.setDescriptionComponent(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("motds.maintenance-motd.1") + "\n" + Core.getConfig().get().getString("motds.maintenance-motd.2"))));
         } else {
             serverPing.setVersion(new Protocol(Utils.replaceEveryThing(Core.getConfig().get().getString("network-info.server-version")), Utils.getVersion(serverPing.getVersion().getProtocol())));
-            serverPing.setPlayers(new Players(Core.getConfig().get().getInt("network-info.max-players") != 0 ? Core.getConfig().get().getInt("network-info.max-players") : ProxyServer.getInstance().getOnlineCount() + 1, ProxyServer.getInstance().getOnlineCount(), Core.getConfig().get().getBoolean("hover-messages.enable") ? Utils.getHoverMessage() : null));
+            serverPing.setPlayers(new Players(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : ProxyServer.getInstance().getOnlineCount() + 1, ProxyServer.getInstance().getOnlineCount(), Core.getConfig().get().getBoolean("hover-messages.enable") ? Utils.getHoverMessage() : null));
             serverPing.setDescriptionComponent(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("motds.default-motd.1") + "\n" + Core.getConfig().get().getString("motds.default-motd.2"))));
         }
 

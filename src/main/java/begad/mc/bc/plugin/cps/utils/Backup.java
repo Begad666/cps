@@ -53,7 +53,7 @@ public class Backup {
             boolean result = dir.mkdirs();
             return result ? 2 : 1;
         } else {
-            File backup_file = new File(dir, name + ".yml");
+            File backup_file = new File(dir, name);
             if (!backup_file.exists()) {
                 return 3;
             } else {

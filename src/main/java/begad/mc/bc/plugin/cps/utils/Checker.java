@@ -14,32 +14,44 @@ public class Checker {
     }
 
     public static boolean checkPlayer(ProxiedPlayer player) {
-        if (Type == CheckType.PERM) {
-            if (player != null) {
+        if (player == null) {
+            throw new NullPointerException("player Cannot be null");
+        }
+        switch (Type) {
+            case PERM: {
                 return player.hasPermission("cps.bypass");
-            } else {
-                throw new NullPointerException("player Cannot be null");
             }
-        } else {
-            ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
-            if (player != null) {
-                return Core.OnlineMode ? allowedPlayers.contains(player.getUniqueId().toString()) : allowedPlayers.contains(player.getName());
-            } else {
-                throw new NullPointerException("player Cannot be null");
+            case CONFIG_ALLOWED_PLAYERS_UUID: {
+                ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
+                return allowedPlayers.contains(player.getUniqueId().toString());
+            }
+            case CONFIG_ALLOWED_PLAYERS_USERNAMES: {
+                ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
+                return allowedPlayers.contains(player.getName());
             }
         }
+
+        return false;
     }
 
     public static boolean checkConnection(PendingConnection pendingConnection) {
-        if (Type == CheckType.PERM) {
-            throw new IllegalComponentStateException("Cannot check a permission on a connection");
-        } else {
-            ArrayList<String> allowedplayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
-            if (pendingConnection != null) {
-                return Core.OnlineMode ? allowedplayers.contains(pendingConnection.getUniqueId().toString()) : allowedplayers.contains(pendingConnection.getName());
-            } else {
-                throw new NullPointerException("pendingConnection Cannot be null");
+        if (pendingConnection == null) {
+            throw new NullPointerException("pendingConnection Cannot be null");
+        }
+        switch (Type) {
+            case PERM: {
+                throw new IllegalComponentStateException("Cannot check a permission on a connection");
+            }
+            case CONFIG_ALLOWED_PLAYERS_UUID: {
+                ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
+                return allowedPlayers.contains(pendingConnection.getUniqueId().toString());
+            }
+            case CONFIG_ALLOWED_PLAYERS_USERNAMES: {
+                ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");
+                return allowedPlayers.contains(pendingConnection.getName());
             }
         }
+
+        return false;
     }
 }

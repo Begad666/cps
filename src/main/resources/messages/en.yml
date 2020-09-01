@@ -22,7 +22,7 @@ commands:
     createbackup:
       help: " - Creates a config backup "
     loadbackup:
-      help: " <file name> - Loads the backup with that name, no need for adding .yml at the end "
+      help: " <file name> - Loads the backup with that name"
     default:
       compile-version: "Compile Version: "
       current-version: "Version: "

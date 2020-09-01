@@ -38,64 +38,6 @@ public class Core extends Plugin {
     public Core() {
     }
 
-    @Override
-    public void onLoad() {
-        instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v7", "v4.0.0", UpdateAPI.SPIGET);
-        updates.setMessage("....");
-    }
-
-    public static Core getInstance() {
-        return instance;
-    }
-
-    @Override
-    public void onDisable() {
-        PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
-        this.getLogger().info("Started disable process");
-        this.getLogger().info("Unregistering commands...");
-        pluginmanager.unregisterCommands(getInstance());
-        this.getLogger().info("Unregistering listeners...");
-        pluginmanager.unregisterListeners(getInstance());
-        if (config.get().getBoolean("multiproxy.enable") && databaseManager.isStarted()) {
-            this.getLogger().info("Disconnecting from database...");
-            databaseManager.stopDataSource();
-        }
-
-        this.getLogger().info("Canceling scheduled tasks...");
-        ProxyServer.getInstance().getScheduler().cancel(getInstance());
-        this.getLogger().info(this.getDescription().getVersion() + " is now disabled!");
-        CPS.isEnabled = false;
-    }
-
-    private void RegisterListeners() {
-        PluginManager pluginManager = this.getProxy().getPluginManager();
-        pluginManager.registerListener(getInstance(), new ChangePingData());
-
-        try {
-            if (CheckType.valueOf(config.get().getString("settings.check-type")) == CheckType.PERM) {
-                pluginManager.registerListener(getInstance(), new PermBased());
-                this.getLogger().info(Utils.getMessage("", "Using permission checking", "", "checker.perm", false));
-                Checker.Type = CheckType.PERM;
-            } else {
-                if (OnlineMode) {
-                    pluginManager.registerListener(getInstance(), new UUIDBased());
-                    this.getLogger().info(Utils.getMessage("", "Using UUID for checking with allowed-players config section", "", "checker.allowed-players-uuid", false));
-                } else {
-                    pluginManager.registerListener(getInstance(), new UsernameBased());
-                    this.getLogger().info(Utils.getMessage("", "Using username for checking with allowed-players config section", "", "checker.allowed-players-username", false));
-                }
-
-                Checker.Type = CheckType.CONFIG_ALLOWED_PLAYERS;
-            }
-        } catch (IllegalArgumentException e) {
-            this.getLogger().warning(Utils.getMessage("", "Couldn't process settings.check-type, using permission checking (default)", "", "checker.error-perm", false));
-            pluginManager.registerListener(getInstance(), new PermBased());
-            Checker.Type = CheckType.PERM;
-        }
-
-    }
-
     public static void reload(CommandSender sender) {
         PluginManager pluginManager = getInstance().getProxy().getPluginManager();
         pluginManager.unregisterListeners(getInstance());
@@ -154,7 +96,7 @@ public class Core extends Plugin {
                         }
                     }
 
-                }, 30, 30, TimeUnit.MINUTES);
+                }, 8, 8, TimeUnit.HOURS);
             } else {
                 updates.setMessage(Utils.getMessage("", "Updates are disabled", "", "updates.disabled", false));
             }
@@ -167,6 +109,69 @@ public class Core extends Plugin {
             getInstance().getLogger().info(Utils.getMessage("", "Done", "", "plugin.done", false));
 
         }
+    }
+
+    public static Core getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void onDisable() {
+        PluginManager pluginmanager = ProxyServer.getInstance().getPluginManager();
+        this.getLogger().info("Started disable process");
+        this.getLogger().info("Unregistering commands...");
+        pluginmanager.unregisterCommands(getInstance());
+        this.getLogger().info("Unregistering listeners...");
+        pluginmanager.unregisterListeners(getInstance());
+        if (config.get().getBoolean("multiproxy.enable") && databaseManager.isStarted()) {
+            this.getLogger().info("Disconnecting from database...");
+            databaseManager.stopDataSource();
+        }
+
+        this.getLogger().info("Canceling scheduled tasks...");
+        ProxyServer.getInstance().getScheduler().cancel(getInstance());
+        this.getLogger().info(this.getDescription().getVersion() + " is now disabled!");
+        CPS.isEnabled = false;
+    }
+
+    @Override
+    public void onLoad() {
+        instance = this;
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.0", "v4.1.0", UpdateAPI.SPIGET);
+        updates.setMessage("....");
+    }
+
+    private void RegisterListeners() {
+        PluginManager pluginManager = this.getProxy().getPluginManager();
+        pluginManager.registerListener(getInstance(), new ChangePingData());
+
+        try {
+            switch (CheckType.valueOf(config.get().getString("settings.check-type"))) {
+                case PERM: {
+                    pluginManager.registerListener(getInstance(), new PermBased());
+                    this.getLogger().info(Utils.getMessage("", "Using permission checking", "", "checker.perm", false));
+                    Checker.Type = CheckType.PERM;
+                    break;
+                }
+                case CONFIG_ALLOWED_PLAYERS_UUID: {
+                    pluginManager.registerListener(getInstance(), new UUIDBased());
+                    this.getLogger().info(Utils.getMessage("", "Using UUID for checking with allowed-players config section", "", "checker.allowed-players-uuid", false));
+                    Checker.Type = CheckType.CONFIG_ALLOWED_PLAYERS_UUID;
+                    break;
+                }
+                case CONFIG_ALLOWED_PLAYERS_USERNAMES: {
+                    pluginManager.registerListener(getInstance(), new UsernameBased());
+                    this.getLogger().info(Utils.getMessage("", "Using username for checking with allowed-players config section", "", "checker.allowed-players-username", false));
+                    Checker.Type = CheckType.CONFIG_ALLOWED_PLAYERS_USERNAMES;
+                    break;
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            this.getLogger().warning(Utils.getMessage("", "Couldn't process settings.check-type, using permission checking (default)", "", "checker.error-perm", false));
+            pluginManager.registerListener(getInstance(), new PermBased());
+            Checker.Type = CheckType.PERM;
+        }
+
     }
 
     public static BungeeConfig getConfig() {
@@ -217,7 +222,7 @@ public class Core extends Plugin {
 
             new MetricsLite(this, 5145);
             if (config.get().getBoolean("update-checker-enabled")) {
-                ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {
+                ProxyServer.getInstance().getScheduler().runAsync(getInstance(), () -> {
                     String current = this.getDescription().getVersion();
                     String latest = updates.getLatestVersion();
                     if (latest == null) {
@@ -239,7 +244,7 @@ public class Core extends Plugin {
                         }
                     }
 
-                }, 4, TimeUnit.SECONDS);
+                });
                 ScheduledTasks.updateTask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {
                     String current = this.getDescription().getVersion();
                     String latest = updates.getLatestVersion();
@@ -262,7 +267,7 @@ public class Core extends Plugin {
                         }
                     }
 
-                }, 30, 30, TimeUnit.MINUTES);
+                }, 8, 8, TimeUnit.HOURS);
             } else {
                 updates.setMessage(Utils.getMessage("", "Updates are disabled", "", "updates.disabled", false));
             }

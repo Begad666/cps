@@ -62,47 +62,55 @@ public class Utils {
     }
 
     public static PlayerInfo[] getHoverMessage() {
-        if (!Core.getConfig().get().getBoolean("hover-messages.show-players")) {
+        PlayerInfo[] hovermessage;
+        if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
             ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
-            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+            if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
+                hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
+            } else {
+                hovermessage = new PlayerInfo[list.size()];
+            }
 
             for (int i = 0; i < hovermessage.length; ++i) {
                 hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
             }
 
-            return hovermessage;
         } else {
             ArrayList<String> list = (ArrayList<String>) Core.getConfig().get().getStringList("hover-messages.default-hover-message");
-            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+            hovermessage = new PlayerInfo[list.size()];
 
             for (int i = 0; i < hovermessage.length; ++i) {
                 hovermessage[i] = new PlayerInfo(replaceEveryThing(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
             }
 
-            return hovermessage;
         }
+        return hovermessage;
     }
 
     public static PlayerInfo[] getMaintenanceHoverMessage() {
-        if (!Core.getConfig().get().getBoolean("hover-messages.show-players")) {
+        PlayerInfo[] hovermessage;
+        if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
             ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
-            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+            if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
+                hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
+            } else {
+                hovermessage = new PlayerInfo[list.size()];
+            }
 
             for (int i = 0; i < hovermessage.length; ++i) {
                 hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
             }
 
-            return hovermessage;
         } else {
             ArrayList<String> list = (ArrayList<String>) Core.getConfig().get().getStringList("hover-messages.maintenance-hover-message");
-            PlayerInfo[] hovermessage = new PlayerInfo[list.size()];
+            hovermessage = new PlayerInfo[list.size()];
 
             for (int i = 0; i < hovermessage.length; ++i) {
                 hovermessage[i] = new PlayerInfo(replaceEveryThing(replacePlaceHolders(list.get(i))), UUID.fromString("0-0-0-0-0"));
             }
 
-            return hovermessage;
         }
+        return hovermessage;
     }
 
     public static int getVersion(int playerversion) {

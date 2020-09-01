@@ -11,21 +11,26 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class CPS extends Command {
+public class CPS extends Command implements TabExecutor {
     public static boolean isEnabled;
+    public final String[] commands = new String[]{
+            "help", "reload", "pull", "push", "dbconnected", "createbackup", "loadbackup"
+    };
 
     public CPS() {
         super("cps", "cps.admin");
     }
 
     public void execute(CommandSender sender, String[] args) {
-        ArrayList<String> nargs = new ArrayList(Arrays.asList(args));
+        ArrayList<String> nargs = new ArrayList<>(Arrays.asList(args));
         if (nargs.isEmpty()) {
             Utils.sendMessage(sender, "------------------------------");
             Utils.sendMessage(sender, "", "Compile Version: " + Core.getUpdates().getCompileCurrentVersion(), Core.getUpdates().getCompileCurrentVersion(), "commands.cps.default.compile-version");
@@ -184,6 +189,7 @@ public class CPS extends Command {
     private void loadbackup(CommandSender sender, ArrayList<String> args) {
         if (args.isEmpty()) {
             Utils.sendMessage(sender, "", "Please provide a file name", "", "backup.load.error-args");
+            return;
         }
         String file = args.get(0);
         int result = Backup.loadBackup(file);
@@ -205,5 +211,43 @@ public class CPS extends Command {
                 Utils.sendMessage(sender, "", "Cannot write to config file", "", "backup.load.error-file-write");
         }
 
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender commandSender, String[] args) {
+        ArrayList<String> matches = new ArrayList<>();
+        if (args.length == 0) {
+            return matches;
+        } else {
+            switch (args.length) {
+                case 1: {
+                    matches = new ArrayList<>();
+                    for (String command : commands) {
+                        if (command.startsWith(args[0])) {
+                            matches.add(command);
+                        }
+                    }
+                    break;
+                }
+
+                case 2: {
+                    if (args[0].equals("loadbackup")) {
+                        File folder = new File(Core.getInstance().getDataFolder() + "/" + Core.getConfig().get().getString("backup.folder"));
+                        File[] listOfFiles = folder.listFiles();
+                        if (listOfFiles == null) {
+                            break;
+                        }
+
+                        for (File file : listOfFiles) {
+                            if (file.isFile()) {
+                                matches.add(file.getName());
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return matches;
     }
 }

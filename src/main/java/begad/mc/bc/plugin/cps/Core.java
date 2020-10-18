@@ -34,6 +34,7 @@ public class Core extends Plugin {
     private static BungeeUpdates updates;
     private static BungeeConfig config;
     private static Database databaseManager;
+    private static MetricsLite metrics;
 
     public Core() {
     }
@@ -137,7 +138,7 @@ public class Core extends Plugin {
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.0", "v4.1.0", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.0", "v4.1.1", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 
@@ -220,7 +221,7 @@ public class Core extends Plugin {
                 databaseManager = Factory.setupNothing();
             }
 
-            new MetricsLite(this, 5145);
+            metrics = new MetricsLite(this, 5145);
             if (config.get().getBoolean("update-checker-enabled")) {
                 ProxyServer.getInstance().getScheduler().runAsync(getInstance(), () -> {
                     String current = this.getDescription().getVersion();

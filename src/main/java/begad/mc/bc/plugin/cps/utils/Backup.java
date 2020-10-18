@@ -38,7 +38,7 @@ public class Backup {
             }
 
             try {
-                Files.copy(inputStream, backupfile.toPath());
+                Files.copy(inputStream, backupfile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 return 0;
             } catch (IOException var7) {
                 var7.printStackTrace();

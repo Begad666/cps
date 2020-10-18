@@ -239,7 +239,7 @@ public class CPS extends Command implements TabExecutor {
                         }
 
                         for (File file : listOfFiles) {
-                            if (file.isFile()) {
+                            if (file.isFile() && file.getName().endsWith(".yml")) {
                                 matches.add(file.getName());
                             }
                         }

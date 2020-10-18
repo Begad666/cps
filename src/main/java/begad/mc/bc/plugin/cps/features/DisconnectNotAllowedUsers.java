@@ -60,7 +60,7 @@ public class DisconnectNotAllowedUsers {
 
             @EventHandler
             public void loginChecks(LoginEvent event) {
-                if(event.isCancelled()) {
+                if (event.isCancelled()) {
                     return;
                 }
                 
@@ -93,7 +93,7 @@ public class DisconnectNotAllowedUsers {
 
             @EventHandler
             public void loginChecks(LoginEvent event) {
-                if(event.isCancelled()) {
+                if (event.isCancelled()) {
                     return;
                 }
                 

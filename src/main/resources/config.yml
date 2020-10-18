@@ -18,7 +18,7 @@ network-info:
 
 #Settings for the server
 settings:
-  #Should the plugin block users not allowed by the list below?
+  #Should the plugin allow users not allowed by the list below?
   allow-all-versions: false
   #Allowed protocols versions to join, to know more about protocols check this out https://wiki.vg/Protocol_version_numbers
   allowed-protocols:
@@ -84,11 +84,11 @@ allowed-players:
 #Backup settings
 backup:
   #Where to place the backup (relative to the plugin data directory)
-  #For example, if you have installed bungeecord at /servers/proxy or C:\server\proxy
+  #For example, if you have installed bungeecord at /servers/proxy or C:\servers\proxy
   #if you want to store backups at /servers/proxy/backups/cps
   #then you will need to set this to "../../backups/cps"
   folder: 'backup'
-  #how should the plugin name the file, the plugin will append .yml to the file automatically
+  #How should the plugin name the file, the plugin will append .yml to the file automatically
   #Placeholders:
   # {time} - replaces it with current time e.g. 11_00AM or 3_02PM (here _ means :)
   # {date} - replaces it with current date e.g. 02_15_2020 (also here _ means /)

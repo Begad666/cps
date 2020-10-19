@@ -1,18 +1,19 @@
 package begad.mc.bc.plugin.cps.features;
 
 import begad.mc.bc.plugin.cps.Core;
+import begad.mc.bc.plugin.cps.commands.cps.Fix;
 import begad.mc.bc.plugin.cps.utils.Backup;
 import begad.mc.bc.plugin.cps.utils.Utils;
+import com.google.gson.Gson;
 import net.md_5.bungee.api.CommandSender;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class MultiProxy {
@@ -27,7 +28,7 @@ public class MultiProxy {
             return;
         }
         boolean stoponerror = Core.getConfig().get().getBoolean("multiproxy.backup.stoponerror");
-        String file;
+        String json;
         if (sender != null) {
             Utils.sendMessage(sender, "", "Pulling...", "", "multiproxy.pull.start");
         }
@@ -43,7 +44,7 @@ public class MultiProxy {
                     return;
                 }
                 data.next();
-                file = data.getString("config");
+                json = data.getString("config");
             }
         } catch (SQLException e) {
             if (sender != null) {
@@ -100,24 +101,21 @@ public class MultiProxy {
                     return;
             }
         }
-
-        File configFile = new File(Core.getInstance().getDataFolder(), "config.yml");
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8))) {
-            writer.write(file);
-        } catch (IOException e) {
-            if (sender != null) {
-                Utils.sendMessage(sender, "", "Cannot write to the config file", "", "multiproxy.pull.error-file-write");
-            }
-            Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot write to the config file", "", "multiproxy.pull.error-file-write", false));
-            return;
+        Map map = new Gson().fromJson(json, Map.class);
+        Utils.removeBlocked(map);
+        Utils.undump(Core.getConfig().get(), map);
+        if (Core.getConfig().get().getBoolean("multiproxy.autoreplace")) {
+            new Fix().run(sender, null);
         }
-
         if (sender != null) {
             Utils.sendMessage(sender, "", "Done, Reloading...", "", "multiproxy.pull.done");
         }
 
+        if (Core.getConfig().get().getBoolean("multiproxy.autosave")) {
+            Core.getConfig().save();
+        }
         Core.getInstance().getLogger().info(Utils.getMessage("", "Done, Reloading...", "", "multiproxy.pull.done", false));
-        Core.reload(sender);
+        Core.reload(sender, Core.getConfig().get().getBoolean("multiproxy.autosave"));
 
     }
 
@@ -132,32 +130,13 @@ public class MultiProxy {
             Utils.sendMessage(sender, "", "Pushing...", "", "multiproxy.push.start");
         }
         Core.getInstance().getLogger().info(Utils.getMessage("", "Pushing...", "", "multiproxy.push.start", false));
-        StringBuilder file = new StringBuilder();
-        File configFile = new File(Core.getInstance().getDataFolder(), "config.yml");
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                file.append(line).append("\n");
-            }
-        } catch (FileNotFoundException e) {
-            if (sender != null) {
-                Utils.sendMessage(sender, "", "Cannot find the config file, is the file there?", "", "multiproxy.push.error-config-not-found");
-            }
-            Core.getInstance().getLogger().info(Utils.getMessage("", "Cannot find the config file, is the file there?", "", "multiproxy.push.error-config-not-found", false));
-            return;
-        } catch (IOException e) {
-            if (sender != null) {
-                Utils.sendMessage(sender, "", "Cannot read the config file", "", "multiproxy.push.error-config-read-file");
-            }
-            Core.getInstance().getLogger().info(Utils.getMessage("", "Cannot read the config file", "", "multiproxy.push.error-config-read-file", false));
-            return;
-        }
+        Map<Object, Object> dumped = Utils.dump(Core.getConfig().get());
+        Utils.removeBlocked(dumped);
 
         try (Connection connection = Core.getDatabaseManager().getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("DELETE FROM cps WHERE groupid='" + Core.getConfig().get().getString("multiproxy.groupid") + "'");
-                statement.executeUpdate("INSERT INTO cps VALUES ('" + Core.getConfig().get().getString("multiproxy.groupid") + "', '" + file.toString() + "')");
+                statement.executeUpdate("INSERT INTO cps VALUES ('" + Core.getConfig().get().getString("multiproxy.groupid") + "', '" + new Gson().toJson(dumped) + "')");
             } catch (SQLException exception) {
                 Core.getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), exception);
                 return;

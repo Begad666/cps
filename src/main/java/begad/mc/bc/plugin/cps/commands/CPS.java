@@ -24,6 +24,7 @@ public class CPS extends CommandGroup {
         this.commands.put("dbconnected", new DbConnected());
         this.commands.put("createbackup", new CreateBackup());
         this.commands.put("loadbackup", new LoadBackup());
+        this.commands.put("fix", new Fix());
     }
 
     @Override

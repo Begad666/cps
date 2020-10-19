@@ -1,5 +1,5 @@
 #Config Version
-config-version: 'v8.1.1'
+config-version: 'v8.1.2'
 #Enable or disable the update checker
 update-checker-enabled: true
 #Set the current language
@@ -104,6 +104,12 @@ multiproxy:
   groupid: '1'
   #Should the plugin auto replace unicode characters (go to bottom of the file)
   autoreplace: true
+  #Should the plugin auto save the config?
+  autosave: true
+  #Custom sections to block from the config push
+  blocked:
+    - 'multiproxy' #This is always blocked, but put as an example
+    - 'connectionsettings.host' #Same like above, but won't block connectionsettings, only host
   #MultiProxy backup settings
   backup:
     #Should the plugin backup the config file when a pull happens
@@ -126,6 +132,8 @@ connectionsettings:
 
 #Replace strings
 #This section used when a unicode characters is found (Won't get added into the database if using multiproxy)
+#Not every character is provided
+#WARNING: This way of replacing isn't reliable (Like if your uuid contains a sequence of characters like below, it will replace it), use it at your own risk.
 replace:
   u0026: '&'
   u0025: '%'
@@ -136,4 +144,6 @@ replace:
   u0027: ''''
   u002F: '/'
   u002A: '*'
+  u003e: '>'
+  u003c: '<'
 #Done, go type /cps reload

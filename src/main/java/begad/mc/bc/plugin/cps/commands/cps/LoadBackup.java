@@ -28,7 +28,7 @@ public class LoadBackup extends Command {
                 switch (result) {
                     case 0:
                         Utils.sendMessage(sender, "", "Done loading config backup", "", "backup.load.done");
-                        Core.reload(sender);
+                        Core.reload(sender, true);
                         break;
                     case 1:
                         Utils.sendMessage(sender, "", "No backup directory is available and couldn't create backup directory", "", "backup.load.error-no-directory-cannot-create");
@@ -51,7 +51,7 @@ public class LoadBackup extends Command {
             switch (result) {
                 case 0:
                     Utils.sendMessage(sender, "", "Done loading config backup", "", "backup.load.done");
-                    Core.reload(sender);
+                    Core.reload(sender, true);
                     break;
                 case 1:
                     Utils.sendMessage(sender, "", "No backup directory is available and couldn't create backup directory", "", "backup.load.error-no-directory-cannot-create");

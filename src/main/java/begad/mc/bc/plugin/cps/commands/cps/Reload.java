@@ -18,12 +18,12 @@ public class Reload extends Command {
     public void run(CommandSender sender, ArrayList<String> arrayList) {
         if ((sender instanceof ProxiedPlayer)) {
             if (Checker.checkPlayer((ProxiedPlayer) sender)) {
-                Core.reload(sender);
+                Core.reload(sender, true);
             } else {
                 Utils.sendMessage(sender, "", "You can't use that command", "", "commands.cps.not-allowed");
             }
         } else {
-            Core.reload(sender);
+            Core.reload(sender, true);
         }
     }
 

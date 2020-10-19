@@ -23,6 +23,8 @@ commands:
       help: " - Creates a config backup "
     loadbackup:
       help: " <file name> - Loads the backup with that name"
+    fix:
+      help: " - Fixes the config by replacing unicode characters "
     default:
       compile-version: "Compile Version: "
       current-version: "Version: "
@@ -67,7 +69,6 @@ multiproxy:
   pull:
     start: "Pulling..."
     error-no-data: "No data available"
-    error-file-write: "Cannot write to the config file"
     done: "Done, Reloading..."
     backup:
       error-directory-create: "Cannot create directory for backups, canceling pull"
@@ -75,8 +76,6 @@ multiproxy:
       done: "Done"
   push:
     start: "Pushing..."
-    error-config-not-found: "Cannot find the config file, is the file there?"
-    error-config-read-file: "Cannot read the config file"
     done: "Done"
 
 updates:

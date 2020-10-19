@@ -38,41 +38,43 @@ public class Core extends Plugin {
     public Core() {
     }
 
-    public static void reload(CommandSender sender) {
+    public static void reload(CommandSender sender, boolean full) {
         PluginManager pluginManager = getInstance().getProxy().getPluginManager();
         pluginManager.unregisterListeners(getInstance());
         pluginManager.unregisterCommands(getInstance());
-        databaseManager.stopDataSource();
         if (sender != null) {
             Utils.sendMessage(sender, "", "Reloading...", "", "plugin.reload");
         }
-
         getInstance().getLogger().info(Utils.getMessage("", "Reloading...", "", "plugin.reload", false));
 
-        boolean result = config.check();
-        if (result) {
-            config.loadMessagesFile(config.get().getString("language"));
-            Language = config.get().getString("language");
-            if (config.get().getBoolean("multiproxy.enable")) {
-                getInstance().getLogger().info("Connecting To Database...");
-                ProxyServer.getInstance().getScheduler().runAsync(getInstance(), () -> {
-                    databaseManager = Factory.setupWithDataSource("begad.libs.mariadb.jdbc.MariaDbDataSource", config.get().getString("connectionsettings.host"), config.get().getInt("connectionsettings.port"), config.get().getString("connectionsettings.database"), "CustomProtocolSettings Pool", 4);
-                    databaseManager.set(config.get().getString("connectionsettings.user"), config.get().getString("connectionsettings.password"));
-                    databaseManager.startDataSource();
-                    try (Connection connection = databaseManager.getConnection()) {
-                        try (Statement statement = connection.createStatement()) {
-                            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))");
-                        } catch (SQLException exception) {
-                            getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), exception);
+        if (full) {
+            databaseManager.stopDataSource();
+            boolean result = config.check();
+            if (result) {
+                config.loadMessagesFile(config.get().getString("language"));
+                Language = config.get().getString("language");
+                if (config.get().getBoolean("multiproxy.enable")) {
+                    getInstance().getLogger().info("Connecting To Database...");
+                    ProxyServer.getInstance().getScheduler().runAsync(getInstance(), () -> {
+                        databaseManager = Factory.setupWithDataSource("begad.libs.mariadb.jdbc.MariaDbDataSource", config.get().getString("connectionsettings.host"), config.get().getInt("connectionsettings.port"), config.get().getString("connectionsettings.database"), "CustomProtocolSettings Pool", 4);
+                        databaseManager.set(config.get().getString("connectionsettings.user"), config.get().getString("connectionsettings.password"));
+                        databaseManager.startDataSource();
+                        try (Connection connection = databaseManager.getConnection()) {
+                            try (Statement statement = connection.createStatement()) {
+                                statement.executeUpdate("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))");
+                            } catch (SQLException exception) {
+                                getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), exception);
+                            }
+                        } catch (SQLException e) {
+                            getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), e);
                         }
-                    } catch (SQLException e) {
-                        getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), e);
-                    }
-                });
+                    });
+                } else {
+                    databaseManager = Factory.setupNothing();
+                }
             } else {
-                databaseManager = Factory.setupNothing();
+                Language = config.get().getString("language");
             }
-
             if (config.get().getBoolean("update-checker-enabled")) {
                 ScheduledTasks.updateTask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {
                     String current = getInstance().getDescription().getVersion();
@@ -136,7 +138,7 @@ public class Core extends Plugin {
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.1", "v4.1.2", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.2", "v4.1.3", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 

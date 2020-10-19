@@ -9,11 +9,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.config.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -161,5 +159,75 @@ public class Utils {
             m = replaceColorCodes(Core.getConfig().get().getString("plugin-prefix") + " " + m);
         }
         return m;
+    }
+
+
+    public static Map<Object, Object> dump(Configuration configuration) {
+        Map<Object, Object> ret = new HashMap<>();
+        for (String i : configuration.getKeys()) {
+            if (configuration.get(i) instanceof Configuration) {
+                ret.put(i, dump(configuration.getSection(i)));
+            } else {
+                ret.put(i, configuration.get(i));
+            }
+        }
+        return ret;
+    }
+
+    // Totally good name for a function.
+    public static void undump(Configuration configuration, Map<Object, Object> dumped) {
+        for (Map.Entry<Object, Object> entry : dumped.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                Configuration configuration1 = new Configuration();
+                undump(configuration1, (Map) entry.getValue());
+                configuration.set((String) entry.getKey(), configuration1);
+            } else {
+                configuration.set((String) entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+    public static void removeBlocked(Map<Object, Object> map) {
+        // Defaults
+        map.remove("config-version");
+        map.remove("update-checker-enabled");
+        map.remove("language");
+        map.remove("multiproxy");
+        map.remove("connectionsettings");
+        map.remove("replace");
+        // Custom
+        for (String i : Core.getConfig().get().getStringList("multiproxy.blocked")) {
+            if (i.contains(".")) {
+                List<String> pathList = new LinkedList<>(Arrays.asList(i.split("\\.")));
+                String firstNode = pathList.get(0);
+                pathList.remove(0);
+                if (map.get(firstNode) instanceof Map) {
+                    removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map) map.get(firstNode));
+                } else {
+                    map.remove(firstNode);
+                }
+            } else {
+                map.remove(i);
+            }
+        }
+    }
+
+    public static void removeRecursive(String name, Map<Object, Object> map) {
+        if (name.contains(".")) {
+            List<String> pathList = new LinkedList<>(Arrays.asList(name.split("\\.")));
+            String firstNode = pathList.get(0);
+            pathList.remove(0);
+            if (map.get(firstNode) instanceof Map) {
+                removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map) map.get(firstNode));
+            } else {
+                map.remove(firstNode);
+            }
+        } else {
+            map.remove(name);
+        }
+    }
+
+    public static boolean isReplaceBlocked(String name) {
+        return name.equals("config-version") || name.equals("update-checker-enabled") || name.equals("language") || name.equals("multiproxy") || name.equals("connectionsettings") || name.equals("replace");
     }
 }

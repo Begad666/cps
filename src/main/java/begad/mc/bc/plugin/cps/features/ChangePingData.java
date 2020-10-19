@@ -17,6 +17,10 @@ public class ChangePingData implements Listener {
 
     @EventHandler
     public void onPing(ProxyPingEvent event) {
+        if (event.getResponse() == null || event instanceof Cancellable && ((Cancellable) event).isCancelled()) {
+			return;
+		}
+        
         ServerPing serverPing = event.getResponse();
         if (Core.getConfig().get().getBoolean("settings.maintenance-enabled")) {
             serverPing.setVersion(new Protocol(Core.getConfig().get().getString("network-info.maintenance-version"), 999));

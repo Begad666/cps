@@ -1,5 +1,5 @@
 #Config Version
-config-version: 'v8.1.0'
+config-version: 'v8.1.1'
 #Enable or disable the update checker
 update-checker-enabled: true
 #Set the current language
@@ -31,6 +31,8 @@ settings:
   maintenance-enabled: false
   #Should the plugin enable /ping command?
   ping-enabled: true
+  #Should the ping command provide a list of players by the prefix the player enters?
+  ping-tab-complete: true
   #How should the plugin check if a player can join while in maintenance or perform super admin commands
   #Available options:
   # PERM : Default, Checks for cps.bypass permission
@@ -109,7 +111,7 @@ multiproxy:
     #Should the plugin stop pulling when an error happens when backing up
     stoponerror: true
 
-#The connection settings for the database (Currently MySQL/MariaDB is Supported)
+#The connection settings for the database (Currently MySQL/MariaDB is supported)
 connectionsettings:
   #Where the database are hosted
   host: 'localhost'

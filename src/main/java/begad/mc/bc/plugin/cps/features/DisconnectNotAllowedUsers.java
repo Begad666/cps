@@ -63,7 +63,7 @@ public class DisconnectNotAllowedUsers {
                 if (event.isCancelled()) {
                     return;
                 }
-                
+
                 if (!Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
                     int protocol = event.getConnection().getVersion();
                     ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");
@@ -96,7 +96,7 @@ public class DisconnectNotAllowedUsers {
                 if (event.isCancelled()) {
                     return;
                 }
-                
+
                 if (!Core.getConfig().get().getBoolean("settings.allow-all-versions")) {
                     int protocol = event.getConnection().getVersion();
                     ArrayList<Integer> allowedprotocols = (ArrayList<Integer>) Core.getConfig().get().getIntList("settings.allowed-protocols");

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Placeholders {
-    private static Map<String, Placeholder> placeholderMap = new HashMap<>();
+    private static final Map<String, Placeholder> placeholderMap = new HashMap<>();
 
     public static void addPlaceholder(Placeholder placeholder) {
         if (!placeholderMap.containsKey(placeholder.name)) {

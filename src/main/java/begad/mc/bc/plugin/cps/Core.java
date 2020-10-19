@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class Core extends Plugin {
-    public static boolean OnlineMode;
     public static String Language;
     private static Core instance;
     private static BungeeUpdates updates;
@@ -132,13 +131,12 @@ public class Core extends Plugin {
         this.getLogger().info("Canceling scheduled tasks...");
         ProxyServer.getInstance().getScheduler().cancel(getInstance());
         this.getLogger().info(this.getDescription().getVersion() + " is now disabled!");
-        CPS.isEnabled = false;
     }
 
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.0", "v4.1.1", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.1", "v4.1.2", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 
@@ -189,7 +187,6 @@ public class Core extends Plugin {
 
     @Override
     public void onEnable() {
-        OnlineMode = this.getProxy().getConfig().isOnlineMode();
         this.getLogger().info("Started enable process");
         this.getLogger().info("Loading config...");
         config = new BungeeConfig(getInstance(), updates, true, "", "messages");
@@ -272,8 +269,6 @@ public class Core extends Plugin {
             } else {
                 updates.setMessage(Utils.getMessage("", "Updates are disabled", "", "updates.disabled", false));
             }
-
-            CPS.isEnabled = true;
         }
     }
 

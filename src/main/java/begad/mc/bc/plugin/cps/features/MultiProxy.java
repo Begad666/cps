@@ -53,53 +53,53 @@ public class MultiProxy {
             return;
         }
 
-            if (Core.getConfig().get().getBoolean("multiproxy.backup.enable")) {
-                if (sender != null) {
-                    Utils.sendMessage(sender, "", "Creating backup...", "", "backup.start");
-                }
-                Core.getInstance().getLogger().info(Utils.getMessage("", "Creating backup...", "", "backup.start", false));
-                Calendar cal = Calendar.getInstance();
-                int result = Backup.saveBackup(Core.getConfig().get().getString("backup.name").replace("{time}", (new SimpleDateFormat("hh_mma")).format(cal.getTime())).replace("{date}", (new SimpleDateFormat("yyyy_MM_dd")).format(cal.getTime())));
-                switch (result) {
-                    case 0:
-                        if (sender != null) {
-                            Utils.sendMessage(sender, "", "Done backing up config", "", "backup.done");
-                        }
-                        Core.getInstance().getLogger().info(Utils.getMessage("", "Done backing up config", "", "backup.done", false));
-                        break;
-                    case 1:
-                        if (stoponerror) {
-                            if (sender != null) {
-                                Utils.sendMessage(sender, "", "Cannot create directory for backups, canceling pull", "", "multiproxy.pull.backup.error-directory-create");
-                            }
-                            Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot create directory for backups, canceling pull", "", "multiproxy.pull.backup.error-directory-create", false));
-                            return;
-                        }
-
-                        if (sender != null) {
-                            Utils.sendMessage(sender, "", "Cannot create directory for backups, canceling backup", "", "backup.error-directory-create");
-                        }
-                        Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot create directory for backups, canceling backup", "", "backup.error-directory-create", false));
-                        break;
-                    case 2:
-                        if (stoponerror) {
-                            if (sender != null) {
-                                Utils.sendMessage(sender, "", "Cannot write to the backup file, canceling pull", "", "multiproxy.pull.backup.error-file-write");
-                            }
-                            Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot write to the backup file, canceling pull", "", "multiproxy.pull.backup.error-file-write", false));
-                            return;
-                        }
-
-                        if (sender != null) {
-                            Utils.sendMessage(sender, "", "Cannot write to the backup file, canceling backup", "", "backup.error-file-write");
-                        }
-                        Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot write to the backup file, canceling backup", "", "backup.error-file-write", false));
-                        break;
-                    case 3:
-                        Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot find the config file, is the file there?, canceling pull", "", "multiproxy.pull.backup.error-config-not-found", false));
-                        return;
-                }
+        if (Core.getConfig().get().getBoolean("multiproxy.backup.enable")) {
+            if (sender != null) {
+                Utils.sendMessage(sender, "", "Creating backup...", "", "backup.start");
             }
+            Core.getInstance().getLogger().info(Utils.getMessage("", "Creating backup...", "", "backup.start", false));
+            Calendar cal = Calendar.getInstance();
+            int result = Backup.saveBackup(Core.getConfig().get().getString("backup.name").replace("{time}", (new SimpleDateFormat("hh_mma")).format(cal.getTime())).replace("{date}", (new SimpleDateFormat("yyyy_MM_dd")).format(cal.getTime())));
+            switch (result) {
+                case 0:
+                    if (sender != null) {
+                        Utils.sendMessage(sender, "", "Done backing up config", "", "backup.done");
+                    }
+                    Core.getInstance().getLogger().info(Utils.getMessage("", "Done backing up config", "", "backup.done", false));
+                    break;
+                case 1:
+                    if (stoponerror) {
+                        if (sender != null) {
+                            Utils.sendMessage(sender, "", "Cannot create directory for backups, canceling pull", "", "multiproxy.pull.backup.error-directory-create");
+                        }
+                        Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot create directory for backups, canceling pull", "", "multiproxy.pull.backup.error-directory-create", false));
+                        return;
+                    }
+
+                    if (sender != null) {
+                        Utils.sendMessage(sender, "", "Cannot create directory for backups, canceling backup", "", "backup.error-directory-create");
+                    }
+                    Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot create directory for backups, canceling backup", "", "backup.error-directory-create", false));
+                    break;
+                case 2:
+                    if (stoponerror) {
+                        if (sender != null) {
+                            Utils.sendMessage(sender, "", "Cannot write to the backup file, canceling pull", "", "multiproxy.pull.backup.error-file-write");
+                        }
+                        Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot write to the backup file, canceling pull", "", "multiproxy.pull.backup.error-file-write", false));
+                        return;
+                    }
+
+                    if (sender != null) {
+                        Utils.sendMessage(sender, "", "Cannot write to the backup file, canceling backup", "", "backup.error-file-write");
+                    }
+                    Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot write to the backup file, canceling backup", "", "backup.error-file-write", false));
+                    break;
+                case 3:
+                    Core.getInstance().getLogger().severe(Utils.getMessage("", "Cannot find the config file, is the file there?, canceling pull", "", "multiproxy.pull.backup.error-config-not-found", false));
+                    return;
+            }
+        }
 
         File configFile = new File(Core.getInstance().getDataFolder(), "config.yml");
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8))) {

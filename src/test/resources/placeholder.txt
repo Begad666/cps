@@ -1,1 +1,1 @@
-Beta releases will be here
+~~Beta releases will be here~~ I didn't know the purpose of the test folder.

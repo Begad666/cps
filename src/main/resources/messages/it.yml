@@ -1,0 +1,87 @@
+plugin:
+  done: "Terminato"
+  reload: "Ricaricando..."
+
+commands:
+  cps:
+    not-found-use-help: "Comando sconosciuto, usa /cps help per tutti i comandi"
+    not-allowed: "Non puoi usare quel comando"
+    help:
+      title: "Help (CR significa che devi stare nella sezione allowed-players del config o avere il permesso cps.bypass, il check si basa sul settings.check-type nel file di configurazione)"
+      help: " - Mostra questo messaggio di aiuto"
+    reload:
+      help: " - Ricarica la configurazione dal file senza riavviare il BungeeCord "
+    pull:
+      help: " - Estrapola la configurazione dal database "
+    push:
+      help: " - Invia la configurazione nel database "
+    dbconnected:
+      help: " - Mostra lo stato di collegamento al database"
+      connected: "Connesso"
+      disconnected: "Disconnesso"
+    createbackup:
+      help: " - Crea un backup della configurazione "
+    loadbackup:
+      help: " <nome file> - Carica il backup"
+    default:
+      compile-version: "Versione Compilata: "
+      current-version: "Versione: "
+      compile-config-version: "Compila la versione di configurazione: "
+      current-config-version: "Versione della configurazione: "
+      updates: "Aggiornamenti: "
+      plugin-page-click: "Pagina del plugin: Clicca Qui"
+      plugin-page-link: "Pagina del plugin: "
+  ping:
+    help: " [nome player] - Si descrive da solo"
+    own: "Il tuo ping è "
+    error-not-player: "Devi essere un giocatore"
+    others: " ha un ping di "
+    error-not-online: "Quel giocatore non è online"
+
+backup:
+  start: "Creando un backup..."
+  done: "Backup configurazione terminata"
+  error-directory-create: "Impossibile creare cartella di backup, annullando backup"
+  error-file-write: "Impossibile scrivere sul file di backup, annullando backup"
+  error-config-not-found: "Impossibile trovare il file di configurazione, il file è presente?, annullando backup"
+  load:
+    done: "Caricamento configurazione terminata"
+    error-args: "Per favore fornisci il nome del file"
+    error-no-directory-cannot-create: "Nessun backup e nessuna cartella di backup presente"
+    directory-create-no-files: "Cartella creata ma nessun file di backup presente"
+    error-not-found: "Nessun file con quel nome è stato trovato"
+    error-file-write: "Impossibile scrivere sul file di configurazione"
+
+checker:
+  perm: "Usando i permessi"
+  allowed-players-uuid: "Utilizzo dell'UUID per il controllo dei giocatori autorizzati"
+  allowed-players-username: "Utilizzo del nome utente per il controllo dei giocatori autorizzati"
+  error-perm: "Impossibile elaborare settings.check-tipe, usando il controllo dei permessi (impostazione predefinita)"
+
+database:
+  #When an database error occurs
+  statement-execute-error: "Impossibile eseguire l'istruzione"
+  not-connected: "Disconnesso dal database"
+
+multiproxy:
+  pull:
+    start: "Ricevendo aggiornamenti dal database..."
+    error-no-data: "Nessun dato disponibile"
+    error-file-write: "Impossibile scrivere sul file di configurazione"
+    done: "Terminato, Ricaricando..."
+    backup:
+      error-directory-create: "Impossibile creare la cartella per i backup, annullamento del pull"
+      error-file-write: "Impossibile scrivere nel file di backup, annullamento del pull"
+      done: "Terminato"
+  push:
+    start: "Inviando..."
+    error-config-not-found: "Impossibile trovare il file di configurazione, il file è lì?"
+    error-config-read-file: "Impossibile leggere il file di configurazione"
+    done: "Terminato"
+
+updates:
+  up-to-date: "Stai usando l'ultima versione"
+  new: "Nuova versione: "
+  error-check: "Impossibile trovare aggiornamenti"
+  error-changed: "Alcuni file del plugin sono stati modificati, reinstalla il plugin da "
+  disabled: "Aggiornamenti disabilitati"

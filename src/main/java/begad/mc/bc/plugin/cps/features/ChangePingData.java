@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ServerPing.Players;
 import net.md_5.bungee.api.ServerPing.Protocol;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
+import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 

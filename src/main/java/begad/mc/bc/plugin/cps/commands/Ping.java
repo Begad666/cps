@@ -8,8 +8,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class Ping extends Command {
     public Ping() {
@@ -30,7 +28,17 @@ public class Ping extends Command {
                 int ping = ProxyServer.getInstance().getPlayer(args.get(0)).getPing();
                 Utils.sendMessage(sender, args.get(0), args.get(0) + " ping is " + ping + " ms", ping + " ms", "commands.ping.others");
             } catch (Exception e) {
-                Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
+                if (args.get(0) != null) {
+                    if (!Core.integration.getPlayerNames().contains(args.get(0))) {
+                        Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
+                    } else {
+                        if (Core.getConfig().get().getBoolean("settings.ping-unstable-redisbungee")) {
+                            Core.integration.getListener().request(args.get(0), (name, ping) -> Utils.sendMessage(sender, name, ping + " ping is " + ping + " ms", ping + " ms", "commands.ping.others"));
+                        } else {
+                            Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
+                        }
+                    }
+                }
             }
         }
     }
@@ -40,12 +48,7 @@ public class Ping extends Command {
         if (!Core.getConfig().get().getBoolean("settings.ping-tab-complete")) {
             return new ArrayList<>();
         } else {
-            ArrayList<String> matches = new ArrayList<>();
-            Collection<ProxiedPlayer> possibleMatches = ProxyServer.getInstance().getPlayers().stream().filter(proxiedPlayer -> proxiedPlayer.getDisplayName().startsWith(strings.length > 0 ? strings[0] : "")).collect(Collectors.toCollection(ArrayList::new));
-            for (ProxiedPlayer proxiedPlayer : possibleMatches) {
-                matches.add(proxiedPlayer.getDisplayName());
-            }
-            return matches;
+            return Core.integration.getPossiblePlayerNames(strings.length > 0 ? strings[0] : "");
         }
     }
 }

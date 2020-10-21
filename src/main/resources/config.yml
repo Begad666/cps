@@ -1,5 +1,5 @@
 #Config Version
-config-version: 'v8.1.2'
+config-version: 'v8.1.3'
 #Enable or disable the update checker
 update-checker-enabled: true
 #Set the current language
@@ -33,6 +33,8 @@ settings:
   ping-enabled: true
   #Should the ping command provide a list of players by the prefix the player enters?
   ping-tab-complete: true
+  #Should the ping command use the unstable support for RedisBungee? (Don't know why it isn't stable)
+  ping-unstable-redisbungee: false
   #How should the plugin check if a player can join while in maintenance or perform super admin commands
   #Available options:
   # PERM : Default, Checks for cps.bypass permission

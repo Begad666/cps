@@ -8,7 +8,6 @@ package begad.mc.bc.plugin.cps.features;
 import begad.mc.bc.plugin.cps.Core;
 import begad.mc.bc.plugin.cps.utils.Checker;
 import begad.mc.bc.plugin.cps.utils.Utils;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -41,7 +40,7 @@ public class DisconnectNotAllowedUsers {
                     event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                 }
             } else {
-                if (Core.getConfig().get().getInt("network-info.max-players") > 0 && ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.integration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
                     if (!Checker.checkPlayer(event.getPlayer())) {
                         event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                     }
@@ -78,7 +77,7 @@ public class DisconnectNotAllowedUsers {
                         event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                     }
                 } else {
-                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.integration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
                         if (!Checker.checkConnection(event.getConnection())) {
                             event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                         }
@@ -111,7 +110,7 @@ public class DisconnectNotAllowedUsers {
                         event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                     }
                 } else {
-                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && ProxyServer.getInstance().getOnlineCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.integration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
                         if (!Checker.checkConnection(event.getConnection())) {
                             event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                         }

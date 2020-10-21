@@ -6,6 +6,7 @@ import begad.mc.bc.plugin.cps.features.ChangePingData;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.AllowedPlayersBased.UUIDBased;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.AllowedPlayersBased.UsernameBased;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.PermBased;
+import begad.mc.bc.plugin.cps.integration.redisbungee.RedisBungeeIntegration;
 import begad.mc.bc.plugin.cps.utils.CheckType;
 import begad.mc.bc.plugin.cps.utils.Checker;
 import begad.mc.bc.plugin.cps.utils.ScheduledTasks;
@@ -33,6 +34,7 @@ public class Core extends Plugin {
     private static BungeeUpdates updates;
     private static BungeeConfig config;
     private static Database databaseManager;
+    public static final RedisBungeeIntegration integration = new RedisBungeeIntegration();
     private static MetricsLite metrics;
 
     public Core() {
@@ -40,6 +42,7 @@ public class Core extends Plugin {
 
     public static void reload(CommandSender sender, boolean full) {
         PluginManager pluginManager = getInstance().getProxy().getPluginManager();
+        integration.stop();
         pluginManager.unregisterListeners(getInstance());
         pluginManager.unregisterCommands(getInstance());
         if (sender != null) {
@@ -109,7 +112,7 @@ public class Core extends Plugin {
                 Utils.sendMessage(sender, "", "Done", "", "plugin.done");
             }
             getInstance().getLogger().info(Utils.getMessage("", "Done", "", "plugin.done", false));
-
+            integration.init();
         }
     }
 
@@ -133,12 +136,13 @@ public class Core extends Plugin {
         this.getLogger().info("Canceling scheduled tasks...");
         ProxyServer.getInstance().getScheduler().cancel(getInstance());
         this.getLogger().info(this.getDescription().getVersion() + " is now disabled!");
+        integration.stop();
     }
 
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.2", "v4.1.3", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.3", "v4.1.4", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 
@@ -271,6 +275,7 @@ public class Core extends Plugin {
             } else {
                 updates.setMessage(Utils.getMessage("", "Updates are disabled", "", "updates.disabled", false));
             }
+            integration.init();
         }
     }
 

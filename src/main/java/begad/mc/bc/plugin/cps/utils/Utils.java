@@ -8,7 +8,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing.PlayerInfo;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 
 import java.util.*;
@@ -20,8 +19,8 @@ public class Utils {
     }
 
     static {
-        Placeholder max = new Placeholder("MaxPlayers", "%max%", (String input, Matcher matcher) -> input.replaceFirst("%max%", Integer.toString(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : ProxyServer.getInstance().getOnlineCount() + 1)), 0);
-        Placeholder online = new Placeholder("OnlinePlayers", "%online%", (String input, Matcher matcher) -> input.replaceFirst("%online%", Integer.toString(ProxyServer.getInstance().getOnlineCount())), 0);
+        Placeholder max = new Placeholder("MaxPlayers", "%max%", (String input, Matcher matcher) -> input.replaceFirst("%max%", Integer.toString(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : Core.integration.getPlayerCount() + 1)), 0);
+        Placeholder online = new Placeholder("OnlinePlayers", "%online%", (String input, Matcher matcher) -> input.replaceFirst("%online%", Integer.toString(Core.integration.getPlayerCount())), 0);
         Placeholder netName = new Placeholder("NetworkName", "%net-name%", (String input, Matcher matcher) -> input.replaceFirst("%net-name%", Core.getConfig().get().getString("network-info.name")), 0);
 
         PlaceholderGroup placeholderGroup = new PlaceholderGroup("Bungee", "%bungee_([1-Z]+):([A-Z]+)%", Pattern.CASE_INSENSITIVE);
@@ -29,12 +28,14 @@ public class Utils {
             String output = input;
             if (matcher.find()) {
                 String server_name = matcher.group(2);
-                if (ProxyServer.getInstance().getServers().containsKey(server_name)) {
-                    int size = ProxyServer.getInstance().getServers().get(server_name).getPlayers().size();
-                    output = output.replaceFirst("%bungee_" + server_name + ":players%", Integer.toString(size));
-                } else {
+                try {
+                    Core.integration.getApi().getPlayersOnServer(server_name);
+                } catch (IllegalArgumentException | NullPointerException exception) {
                     output = output.replaceFirst("%bungee_" + server_name + ":players%", "&4Not Found");
+                    return output;
                 }
+                int size = Core.integration.getApi().getPlayersOnServer(server_name).size();
+                output = output.replaceFirst("%bungee_" + server_name + ":players%", Integer.toString(size));
             }
             return output;
         }, 0));
@@ -74,7 +75,7 @@ public class Utils {
     public static PlayerInfo[] getHoverMessage() {
         PlayerInfo[] hovermessage;
         if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
-            ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
+            ArrayList<String> list = Core.integration.getPlayerNames();
             if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
                 hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
             } else {
@@ -82,7 +83,7 @@ public class Utils {
             }
 
             for (int i = 0; i < hovermessage.length; ++i) {
-                hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
+                hovermessage[i] = new PlayerInfo(list.get(i), Core.integration.isDetected() ? Core.integration.getApi().getUuidFromName(list.get(i), false) : ProxyServer.getInstance().getPlayer(list.get((i))).getUniqueId());
             }
 
         } else {
@@ -100,7 +101,7 @@ public class Utils {
     public static PlayerInfo[] getMaintenanceHoverMessage() {
         PlayerInfo[] hovermessage;
         if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
-            ArrayList<ProxiedPlayer> list = new ArrayList<>(ProxyServer.getInstance().getPlayers());
+            ArrayList<String> list = Core.integration.getPlayerNames();
             if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
                 hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
             } else {
@@ -108,7 +109,7 @@ public class Utils {
             }
 
             for (int i = 0; i < hovermessage.length; ++i) {
-                hovermessage[i] = new PlayerInfo(list.get(i).getDisplayName(), list.get(i).getUniqueId());
+                hovermessage[i] = new PlayerInfo(list.get(i), Core.integration.isDetected() ? Core.integration.getApi().getUuidFromName(list.get(i), false) : ProxyServer.getInstance().getPlayer(list.get((i))).getUniqueId());
             }
 
         } else {
@@ -155,12 +156,12 @@ public class Utils {
         } else {
             m = prefix + m + suffix;
         }
+        m = replaceColorCodes(m);
         if (addPrefix) {
-            m = replaceColorCodes(Core.getConfig().get().getString("plugin-prefix") + " " + m);
+            m = replaceColorCodes(Core.getConfig().get().getString("plugin-prefix")) + " " + m;
         }
         return m;
     }
-
 
     public static Map<Object, Object> dump(Configuration configuration) {
         Map<Object, Object> ret = new HashMap<>();
@@ -228,6 +229,6 @@ public class Utils {
     }
 
     public static boolean isReplaceBlocked(String name) {
-        return name.equals("config-version") || name.equals("update-checker-enabled") || name.equals("language") || name.equals("multiproxy") || name.equals("connectionsettings") || name.equals("replace");
+        return name.equals("config-version") || name.equals("update-checker-enabled") || name.equals("language") || name.equals("multiproxy") || name.equals("connectionsettings") || name.equals("replace") || name.equals("allowed-players");
     }
 }

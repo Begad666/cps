@@ -85,6 +85,27 @@ public class RedisBungeeIntegration {
         return uuids;
     }
 
+    public String getPlayerName(UUID uuid) {
+        if (isDetected()) {
+            return api.getNameFromUuid(uuid, false);
+        }
+        return ProxyServer.getInstance().getPlayer(uuid).getDisplayName();
+    }
+
+    public UUID getPlayerUUID(String name) {
+        UUID uuid;
+        if (isDetected()) {
+            uuid = api.getUuidFromName(name, false);
+        } else {
+            if (ProxyServer.getInstance().getPlayer(name) != null) {
+                uuid = ProxyServer.getInstance().getPlayer(name).getUniqueId();
+            } else {
+                return null;
+            }
+        }
+        return uuid;
+    }
+
     public RedisBungeeAPI getApi() {
         return api;
     }

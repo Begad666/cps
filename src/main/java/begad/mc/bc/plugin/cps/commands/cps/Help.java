@@ -21,7 +21,8 @@ public class Help extends Command {
         Utils.sendMessage(sender, "/cps dbconnected", "/cps dbconnected - Sends what state is the database connection", "", "commands.cps.dbconnected.help");
         Utils.sendMessage(sender, "/cps createbackup", "/cps createbackup - Creates a config backup (CR)", "(CR)", "commands.cps.createbackup.help");
         Utils.sendMessage(sender, "/cps loadbackup", "/cps loadbackup <file name> - Loads the backup with that name, no need for adding .yml at the end (CR)", "(CR)", "commands.cps.loadbackup.help");
-        Utils.sendMessage(sender, "/cps fix", "/fix - Fixes the config by replacing unicode characters (CR)", "(CR)", "commands.fix.help");
+        Utils.sendMessage(sender, "/cps fix", "/cps fix - Fixes the config by replacing unicode characters (CR)", "(CR)", "commands.cps.fix.help");
+        Utils.sendMessage(sender, "/cps vanish", "/cps vanish - Vanish utilities for the plugin. Doesn't manage other plugins. Provide \"show\" to show all vanished players (CR)", "(CR)", "commands.cps.vanish.help");
         Utils.sendMessage(sender, "/ping", "/ping [player name] - The name describes it all", "", "commands.ping.help");
     }
 

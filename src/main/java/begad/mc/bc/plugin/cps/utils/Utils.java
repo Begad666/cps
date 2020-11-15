@@ -11,13 +11,18 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.config.Configuration;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Utils {
     public Utils() {
     }
+
     public static final UUID CONSOLE_UUID = new UUID(0, 0);
+    public static final Supplier<String> CONSOLE = () -> getMessage("", "the Console", "", "vanish.log-console", false);
+    public static final Supplier<String> HIMSELF = () -> getMessage("", "himself", "", "vanish.log-himself", false);
 
     static {
         Placeholder max = new Placeholder("MaxPlayers", "%max%", (String input, Matcher matcher) -> input.replaceFirst("%max%", Integer.toString(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : Core.redisBungeeIntegration.getPlayerCount() + 1)), 0);
@@ -30,12 +35,16 @@ public class Utils {
             if (matcher.find()) {
                 String server_name = matcher.group(2);
                 try {
-                    Core.redisBungeeIntegration.getApi().getPlayersOnServer(server_name);
+                    if (Core.redisBungeeIntegration.isDetected()) {
+                        Core.redisBungeeIntegration.getApi().getPlayersOnServer(server_name);
+                    } else {
+                        ProxyServer.getInstance().getServerInfo(server_name);
+                    }
                 } catch (IllegalArgumentException | NullPointerException exception) {
                     output = output.replaceFirst("%bungee_" + server_name + ":players%", "&4Not Found");
                     return output;
                 }
-                int size = Core.redisBungeeIntegration.getApi().getPlayersOnServer(server_name).size();
+                int size = Core.redisBungeeIntegration.isDetected() ? Core.redisBungeeIntegration.getApi().getPlayersOnServer(server_name).size() : ProxyServer.getInstance().getServerInfo(server_name).getPlayers().size();
                 output = output.replaceFirst("%bungee_" + server_name + ":players%", Integer.toString(size));
             }
             return output;
@@ -76,7 +85,7 @@ public class Utils {
     public static PlayerInfo[] getHoverMessage() {
         PlayerInfo[] hovermessage;
         if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
-            ArrayList<String> list = Core.redisBungeeIntegration.getPlayerNames();
+            ArrayList<String> list = Core.redisBungeeIntegration.getPlayerNames().stream().filter((s) -> !Core.vanishManager.isVanished(Core.redisBungeeIntegration.getPlayerUUID(s))).collect(Collectors.toCollection(ArrayList::new));
             if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
                 hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
             } else {
@@ -102,7 +111,7 @@ public class Utils {
     public static PlayerInfo[] getMaintenanceHoverMessage() {
         PlayerInfo[] hovermessage;
         if (Core.getConfig().get().getBoolean("hover-messages.show-players")) {
-            ArrayList<String> list = Core.redisBungeeIntegration.getPlayerNames();
+            ArrayList<String> list = Core.redisBungeeIntegration.getPlayerNames().stream().filter((s) -> !Core.vanishManager.isVanished(Core.redisBungeeIntegration.getPlayerUUID(s))).collect(Collectors.toCollection(ArrayList::new));
             if (list.size() > Core.getConfig().get().getInt("hover-messages.show-players-limit")) {
                 hovermessage = new PlayerInfo[Core.getConfig().get().getInt("hover-messages.show-players-limit")];
             } else {
@@ -181,7 +190,7 @@ public class Utils {
         for (Map.Entry<Object, Object> entry : dumped.entrySet()) {
             if (entry.getValue() instanceof Map) {
                 Configuration configuration1 = new Configuration();
-                undump(configuration1, (Map) entry.getValue());
+                undump(configuration1, (Map<Object, Object>) entry.getValue());
                 configuration.set((String) entry.getKey(), configuration1);
             } else {
                 configuration.set((String) entry.getKey(), entry.getValue());
@@ -191,10 +200,10 @@ public class Utils {
 
     public static String getName(UUID name) {
         if (name == null) {
-            return getMessage("", "himself", "", "vanish.log-himself", false);
+            return HIMSELF.get();
         }
         if (name.equals(Utils.CONSOLE_UUID)) {
-            return getMessage("", "the Console", "", "vanish.log-console", false);
+            return CONSOLE.get();
         }
         if (Core.redisBungeeIntegration.isDetected()) {
             if (Core.redisBungeeIntegration.getApi().isPlayerOnline(name)) {
@@ -226,7 +235,7 @@ public class Utils {
                 String firstNode = pathList.get(0);
                 pathList.remove(0);
                 if (map.get(firstNode) instanceof Map) {
-                    removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map) map.get(firstNode));
+                    removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map<Object, Object>) map.get(firstNode));
                 } else {
                     map.remove(firstNode);
                 }
@@ -242,7 +251,7 @@ public class Utils {
             String firstNode = pathList.get(0);
             pathList.remove(0);
             if (map.get(firstNode) instanceof Map) {
-                removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map) map.get(firstNode));
+                removeRecursive(pathList.size() != 0 ? String.join(".", pathList) : "", (Map<Object, Object>) map.get(firstNode));
             } else {
                 map.remove(firstNode);
             }

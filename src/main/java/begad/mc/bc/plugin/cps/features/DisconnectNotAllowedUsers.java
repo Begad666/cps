@@ -40,7 +40,7 @@ public class DisconnectNotAllowedUsers {
                     event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                 }
             } else {
-                if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() - (Core.getConfig().get().getBoolean("settings.vanish-max-reduce") ? Core.vanishManager.getPlayers().size() : 0) >= Core.getConfig().get().getInt("network-info.max-players")) {
                     if (!Checker.checkPlayer(event.getPlayer())) {
                         event.getPlayer().getPendingConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                     }
@@ -77,7 +77,7 @@ public class DisconnectNotAllowedUsers {
                         event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                     }
                 } else {
-                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() - (Core.getConfig().get().getBoolean("settings.vanish-max-reduce") ? Core.vanishManager.getPlayers().size() : 0) >= Core.getConfig().get().getInt("network-info.max-players")) {
                         if (!Checker.checkConnection(event.getConnection())) {
                             event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                         }
@@ -110,7 +110,7 @@ public class DisconnectNotAllowedUsers {
                         event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.maintenance-message"))));
                     }
                 } else {
-                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() >= Core.getConfig().get().getInt("network-info.max-players")) {
+                    if (Core.getConfig().get().getInt("network-info.max-players") > 0 && Core.redisBungeeIntegration.getPlayerCount() - (Core.getConfig().get().getBoolean("settings.vanish-max-reduce") ? Core.vanishManager.getPlayers().size() : 0) >= Core.getConfig().get().getInt("network-info.max-players")) {
                         if (!Checker.checkConnection(event.getConnection())) {
                             event.getConnection().disconnect(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("messages.full-message"))));
                         }

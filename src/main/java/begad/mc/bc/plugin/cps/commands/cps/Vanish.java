@@ -10,6 +10,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -73,8 +74,14 @@ public class Vanish extends Command {
                                 if (done) {
                                     if (Core.vanishManager.isVanished(player)) {
                                         Utils.sendMessage(sender, player.getDisplayName(), player.getDisplayName() + " has vanished into the shadows by you", "", "vanish.vanished-other");
+                                        if (Core.getConfig().get().getBoolean("settings.vanish-others-message")) {
+                                            Utils.sendMessage(player, "", "You have vanished into the shadows by " + ((ProxiedPlayer) sender).getDisplayName(), ((ProxiedPlayer) sender).getDisplayName(), "vanish.vanished-other-me");
+                                        }
                                     } else {
                                         Utils.sendMessage(sender, player.getDisplayName(), player.getDisplayName() + " has unvanished into the sunlight by you", "", "vanish.unvanished-other");
+                                        if (Core.getConfig().get().getBoolean("settings.vanish-others-message")) {
+                                            Utils.sendMessage(player, "", "You have unvanished into the sunlight by " + ((ProxiedPlayer) sender).getDisplayName(), ((ProxiedPlayer) sender).getDisplayName(), "vanish.unvanished-other-me");
+                                        }
                                     }
                                 } else {
                                     Utils.sendMessage(sender, "", "A plugin denied the status change", "", "vanish.cancelled");
@@ -124,8 +131,14 @@ public class Vanish extends Command {
                     if (done) {
                         if (Core.vanishManager.isVanished(player)) {
                             Utils.sendMessage(sender, player.getDisplayName(), player.getDisplayName() + " has vanished into the shadows by you", "", "vanish.vanished-other");
+                            if (Core.getConfig().get().getBoolean("settings.vanish-others-message")) {
+                                Utils.sendMessage(player, "", "You have vanished into the shadows by " + Utils.CONSOLE.get(), Utils.CONSOLE.get(), "vanish.vanished-other-me");
+                            }
                         } else {
                             Utils.sendMessage(sender, player.getDisplayName(), player.getDisplayName() + " has unvanished into the sunlight by you", "", "vanish.unvanished-other");
+                            if (Core.getConfig().get().getBoolean("settings.vanish-others-message")) {
+                                Utils.sendMessage(player, "", "You have unvanished into the sunlight by " + Utils.CONSOLE.get(), Utils.CONSOLE.get(), "vanish.unvanished-other-me");
+                            }
                         }
                     } else {
                         Utils.sendMessage(sender, "", "A plugin denied the status change", "", "vanish.cancelled");
@@ -158,6 +171,6 @@ public class Vanish extends Command {
 
     @Override
     public Iterable<String> onTabComplete(CommandSender commandSender, String[] strings) {
-        return new ArrayList<>();
+        return new ArrayList<>(Collections.singletonList("show"));
     }
 }

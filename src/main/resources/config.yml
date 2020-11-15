@@ -41,10 +41,22 @@ settings:
   # CONFIG_ALLOWED_PLAYERS_UUID : Uses UUID for checking with allowed-players section below
   # CONFIG_ALLOWED_PLAYERS_USERNAMES : Uses usernames for checking with allowed-players section below
   check-type: PERM
-  #Should the plugin save every X minutes. Set to 0 to disable saving and just save on disable
+  #Should the plugin save every X minutes. Set to 0 to disable saving and just save on disable?
   save-time: 30
   #Should the plugin vanish manager log the status change to console?
   vanish-log-console: true
+  #When someone gets vanished or unvanished, should the plugin send a message about it?
+  vanish-others-message: true
+  #Should the plugin take the amount of vanished players into account when testing if the server is full?
+  # Example:
+  #  Players: 130 (including vanished players)
+  #  Vanished: 5
+  #  Max: 130
+  #  True : False
+  #  Will not kick players if they join : Will kick players if they join
+  vanish-max-reduce: true
+  #Should the plugin reduce the player count by the players vanished?
+  vanish-ping-reduce: true
 
 #MOTDs
 motds:

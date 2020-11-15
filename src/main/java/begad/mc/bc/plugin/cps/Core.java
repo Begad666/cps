@@ -43,9 +43,6 @@ public class Core extends Plugin {
     public static final PremiumVanishIntegration premiumVanishIntegration = new PremiumVanishIntegration();
     private static MetricsLite metrics;
 
-    public Core() {
-    }
-
     public static void reload(CommandSender sender, boolean full) {
         PluginManager pluginManager = getInstance().getProxy().getPluginManager();
         redisBungeeIntegration.stop();

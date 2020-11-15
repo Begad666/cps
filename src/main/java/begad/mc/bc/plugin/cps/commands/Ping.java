@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Ping extends Command {
     public Ping() {
@@ -27,6 +28,10 @@ public class Ping extends Command {
         } else {
             try {
                 int ping = ProxyServer.getInstance().getPlayer(args.get(0)).getPing();
+                if (Core.vanishManager.isVanished(ProxyServer.getInstance().getPlayer(args.get(0)))) {
+                    Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
+                    return;
+                }
                 Utils.sendMessage(sender, args.get(0), args.get(0) + " ping is " + ping + " ms", ping + " ms", "commands.ping.others");
             } catch (Exception e) {
                 if (args.get(0) != null) {
@@ -34,6 +39,10 @@ public class Ping extends Command {
                         Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
                     } else {
                         if (Core.getConfig().get().getBoolean("settings.ping-unstable-redisbungee")) {
+                            if (Core.vanishManager.isVanished(Core.redisBungeeIntegration.getPlayerUUID(args.get(0)))) {
+                                Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
+                                return;
+                            }
                             Core.redisBungeeIntegration.getListener().requestPing(args.get(0), (name, ping) -> Utils.sendMessage(sender, name, ping + " ping is " + ping + " ms", ping + " ms", "commands.ping.others"));
                         } else {
                             Utils.sendMessage(sender, "", "That player is not online", "", "commands.ping.error-not-online");
@@ -49,7 +58,7 @@ public class Ping extends Command {
         if (!Core.getConfig().get().getBoolean("settings.ping-tab-complete")) {
             return new ArrayList<>();
         } else {
-            return Core.redisBungeeIntegration.getPossiblePlayerNames(strings.length > 0 ? strings[0] : "");
+            return Core.redisBungeeIntegration.getPossiblePlayerNames(strings.length > 0 ? strings[0] : "").stream().filter((e) -> !Core.vanishManager.isVanished(Core.redisBungeeIntegration.getPlayerUUID(e))).collect(Collectors.toList());
         }
     }
 }

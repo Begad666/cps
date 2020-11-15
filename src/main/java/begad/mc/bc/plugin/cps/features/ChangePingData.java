@@ -28,7 +28,7 @@ public class ChangePingData implements Listener {
             serverPing.setDescriptionComponent(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("motds.maintenance-motd.1") + "\n" + Core.getConfig().get().getString("motds.maintenance-motd.2"))));
         } else {
             serverPing.setVersion(new Protocol(Utils.replaceEveryThing(Core.getConfig().get().getString("network-info.server-version")), Utils.getVersion(serverPing.getVersion().getProtocol())));
-            serverPing.setPlayers(new Players(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : Core.redisBungeeIntegration.getPlayerCount() + 1, Core.redisBungeeIntegration.getPlayerCount(), Core.getConfig().get().getBoolean("hover-messages.enable") ? Utils.getHoverMessage() : null));
+            serverPing.setPlayers(new Players(Core.getConfig().get().getInt("network-info.max-players") > 0 ? Core.getConfig().get().getInt("network-info.max-players") : (Core.redisBungeeIntegration.getPlayerCount() - (Core.getConfig().get().getBoolean("settings.vanish-ping-reduce") ? Core.vanishManager.getPlayers().size() : 0)) + 1, Core.redisBungeeIntegration.getPlayerCount() - (Core.getConfig().get().getBoolean("settings.vanish-ping-reduce") ? Core.vanishManager.getPlayers().size() : 0), Core.getConfig().get().getBoolean("hover-messages.enable") ? Utils.getHoverMessage() : null));
             serverPing.setDescriptionComponent(new TextComponent(Utils.replaceEveryThing(Core.getConfig().get().getString("motds.default-motd.1") + "\n" + Core.getConfig().get().getString("motds.default-motd.2"))));
         }
 

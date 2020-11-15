@@ -23,6 +23,9 @@ commands:
       help: " - Crea un backup della configurazione "
     loadbackup:
       help: " <nome file> - Carica il backup"
+    vanish:
+      help: " - Vanish utilities for the plugin. Doesn't manage other plugins. Provide \"show\" to show all vanished players " # Pending translation
+      show: "Showing all vanished players" # Pending translation
     default:
       compile-version: "Versione Compilata: "
       current-version: "Versione: "
@@ -78,6 +81,25 @@ multiproxy:
     error-config-not-found: "Impossibile trovare il file di configurazione, il file è lì?"
     error-config-read-file: "Impossibile leggere il file di configurazione"
     done: "Terminato"
+
+vanish:
+  load-error: "An error occurred while loading vanish data from file. Continuing without loading" # Pending translation
+  save-error: "An error occurred while saving vanish data to file" # Pending translation
+  not-player-error: "Devi essere un giocatore"
+  not-online-error: "Quel giocatore non è online"
+  cancelled: "A plugin denied the status change" # Pending translation
+  vanished: "You have vanished into the shadows" # Pending translation
+  unvanished: "You have unvanished into the sunlight" # Pending translation
+  vanished-other: " has vanished into the shadows by you" # Pending translation
+  unvanished-other: " has unvanished into the sunlight by you" # Pending translation
+  vanished-other-me: "You have vanished into the shadows by " # Pending translation
+  unvanished-other-me: "You have unvanished into the sunlight by " # Pending translation
+  log-vanished: " have vanished by " # Pending translation
+  log-unvanished: " have unvanished by " # Pending translation
+  log-himself: "himself" # Pending translation
+  log-console: "the Console" # Pending translation
+  log-not-found: "Player not found" # Pending translation
+  log-not-found-redisbungee: "Player not found in all instances" # Pending translation
 
 updates:
   up-to-date: "Stai usando l'ultima versione"

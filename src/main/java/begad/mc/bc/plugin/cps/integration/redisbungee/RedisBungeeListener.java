@@ -9,6 +9,7 @@ import net.md_5.bungee.event.EventHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class RedisBungeeListener implements Listener {
     private final Map<String, ArrayList<IPingCallback>> pingRequests = new HashMap<>();
@@ -43,6 +44,19 @@ public class RedisBungeeListener implements Listener {
                     break;
                 }
 
+                case RedisBungeeCommands.VanishStatus: {
+                    String uuid = message.body.get(0);
+                    String status = message.body.get(1);
+                    if (status.equals("vanish")) {
+                        Core.vanishManager.vanish(UUID.fromString(uuid), null, true);
+                    } else if (status.equals("unvanish")) {
+                        Core.vanishManager.unVanish(UUID.fromString(uuid), null, true);
+                    } else {
+                        Core.getInstance().getLogger().warning("Unknown vanish status " + status + " for uuid " + uuid);
+                    }
+                    break;
+                }
+
                 default: {
                     Core.getInstance().getLogger().warning("Received an unknown message: " + message.command);
                     break;
@@ -51,7 +65,7 @@ public class RedisBungeeListener implements Listener {
         }
     }
 
-    public void request(String name, IPingCallback callback) {
+    public void requestPing(String name, IPingCallback callback) {
         pingRequests.computeIfAbsent(name, k -> new ArrayList<>());
         pingRequests.get(name).add(callback);
         if (pingRequests.get(name).size() <= 1) {

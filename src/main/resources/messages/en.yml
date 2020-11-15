@@ -25,6 +25,9 @@ commands:
       help: " <file name> - Loads the backup with that name"
     fix:
       help: " - Fixes the config by replacing unicode characters "
+    vanish:
+      help: " - Vanish utilities for the plugin. Doesn't manage other plugins. Provide \"show\" to show all vanished players "
+      show: "Showing all vanished players"
     default:
       compile-version: "Compile Version: "
       current-version: "Version: "
@@ -77,6 +80,25 @@ multiproxy:
   push:
     start: "Pushing..."
     done: "Done"
+
+vanish:
+  load-error: "An error occurred while loading vanish data from file. Continuing without loading"
+  save-error: "An error occurred while saving vanish data to file"
+  not-player-error: "You must be a player"
+  not-online-error: "That player is not online"
+  cancelled: "A plugin denied the status change"
+  vanished: "You have vanished into the shadows"
+  unvanished: "You have unvanished into the sunlight"
+  vanished-other: " has vanished into the shadows by you"
+  unvanished-other: " has unvanished into the sunlight by you"
+  vanished-other-me: "You have vanished into the shadows by "
+  unvanished-other-me: "You have unvanished into the sunlight by "
+  log-vanished: " have vanished by "
+  log-unvanished: " have unvanished by "
+  log-himself: "himself"
+  log-console: "the Console"
+  log-not-found: "Player not found"
+  log-not-found-redisbungee: "Player not found in all instances"
 
 updates:
   up-to-date: "You are up to date"

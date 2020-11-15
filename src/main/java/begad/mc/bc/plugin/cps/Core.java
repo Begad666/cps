@@ -6,11 +6,14 @@ import begad.mc.bc.plugin.cps.features.ChangePingData;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.AllowedPlayersBased.UUIDBased;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.AllowedPlayersBased.UsernameBased;
 import begad.mc.bc.plugin.cps.features.DisconnectNotAllowedUsers.PermBased;
+import begad.mc.bc.plugin.cps.integration.premiumvanish.PremiumVanishIntegration;
 import begad.mc.bc.plugin.cps.integration.redisbungee.RedisBungeeIntegration;
 import begad.mc.bc.plugin.cps.utils.CheckType;
 import begad.mc.bc.plugin.cps.utils.Checker;
 import begad.mc.bc.plugin.cps.utils.ScheduledTasks;
 import begad.mc.bc.plugin.cps.utils.Utils;
+import begad.mc.bc.plugin.cps.vanish.VanishListener;
+import begad.mc.bc.plugin.cps.vanish.VanishManager;
 import begad.mc.bc.utils.BungeeConfig;
 import begad.mc.bc.utils.BungeeUpdates;
 import begad.mc.utils.Database;
@@ -22,6 +25,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import org.bstats.bungeecord.MetricsLite;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,15 +38,15 @@ public class Core extends Plugin {
     private static BungeeUpdates updates;
     private static BungeeConfig config;
     private static Database databaseManager;
-    public static final RedisBungeeIntegration integration = new RedisBungeeIntegration();
+    public static final VanishManager vanishManager = new VanishManager();
+    public static final RedisBungeeIntegration redisBungeeIntegration = new RedisBungeeIntegration();
+    public static final PremiumVanishIntegration premiumVanishIntegration = new PremiumVanishIntegration();
     private static MetricsLite metrics;
-
-    public Core() {
-    }
 
     public static void reload(CommandSender sender, boolean full) {
         PluginManager pluginManager = getInstance().getProxy().getPluginManager();
-        integration.stop();
+        redisBungeeIntegration.stop();
+        premiumVanishIntegration.stop();
         pluginManager.unregisterListeners(getInstance());
         pluginManager.unregisterCommands(getInstance());
         if (sender != null) {
@@ -112,7 +116,8 @@ public class Core extends Plugin {
                 Utils.sendMessage(sender, "", "Done", "", "plugin.done");
             }
             getInstance().getLogger().info(Utils.getMessage("", "Done", "", "plugin.done", false));
-            integration.init();
+            redisBungeeIntegration.init();
+            premiumVanishIntegration.init();
         }
     }
 
@@ -135,14 +140,19 @@ public class Core extends Plugin {
 
         this.getLogger().info("Canceling scheduled tasks...");
         ProxyServer.getInstance().getScheduler().cancel(getInstance());
+        boolean vanishDone = vanishManager.dump(new File(getInstance().getDataFolder(), "vanish.dat"));
+        if (!vanishDone) {
+            this.getLogger().severe(Utils.getMessage("", "An error occurred while saving vanish data to file", "", "vanish.save-error", false));
+        }
         this.getLogger().info(this.getDescription().getVersion() + " is now disabled!");
-        integration.stop();
+        redisBungeeIntegration.stop();
+        premiumVanishIntegration.stop();
     }
 
     @Override
     public void onLoad() {
         instance = this;
-        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.3", "v4.1.4", UpdateAPI.SPIGET);
+        updates = new BungeeUpdates(getInstance(), "CustomProtocolSettings", "69385", "v8.1.4", "v4.1.5", UpdateAPI.SPIGET);
         updates.setMessage("....");
     }
 
@@ -176,6 +186,8 @@ public class Core extends Plugin {
             pluginManager.registerListener(getInstance(), new PermBased());
             Checker.Type = CheckType.PERM;
         }
+
+        pluginManager.registerListener(getInstance(), new VanishListener());
 
     }
 
@@ -275,7 +287,23 @@ public class Core extends Plugin {
             } else {
                 updates.setMessage(Utils.getMessage("", "Updates are disabled", "", "updates.disabled", false));
             }
-            integration.init();
+            File vanishData = new File(getInstance().getDataFolder(), "vanish.dat");
+            if (vanishData.exists()) {
+                boolean done = vanishManager.loadFile(vanishData);
+                if (!done) {
+                    this.getLogger().severe(Utils.getMessage("", "An error occurred while loading vanish data from file. Continuing without loading", "", "vanish.load-error", false));
+                }
+            }
+            if (config.get().getInt("settings.save-time") > 0) {
+                ScheduledTasks.saveTask = ProxyServer.getInstance().getScheduler().schedule(getInstance(), () -> {
+                    boolean vanishDone = vanishManager.dump(vanishData);
+                    if (!vanishDone) {
+                        this.getLogger().severe(Utils.getMessage("", "An error occurred while saving vanish data to file", "", "vanish.save-error", false));
+                    }
+                }, config.get().getInt("settings.save-time"), config.get().getInt("settings.save-time"), TimeUnit.MINUTES);
+            }
+            redisBungeeIntegration.init();
+            premiumVanishIntegration.init();
         }
     }
 

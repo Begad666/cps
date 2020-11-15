@@ -19,7 +19,7 @@ public class Checker {
         }
         switch (Type) {
             case PERM: {
-                return player.hasPermission("cps.bypass");
+                return player.hasPermission(Permissions.BYPASS);
             }
             case CONFIG_ALLOWED_PLAYERS_UUID: {
                 ArrayList<String> allowedPlayers = (ArrayList<String>) Core.getConfig().get().getStringList("allowed-players");

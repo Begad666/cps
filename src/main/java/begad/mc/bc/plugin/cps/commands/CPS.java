@@ -3,6 +3,7 @@ package begad.mc.bc.plugin.cps.commands;
 import begad.mc.bc.commands.CommandGroup;
 import begad.mc.bc.plugin.cps.Core;
 import begad.mc.bc.plugin.cps.commands.cps.*;
+import begad.mc.bc.plugin.cps.utils.Permissions;
 import begad.mc.bc.plugin.cps.utils.Utils;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -16,7 +17,7 @@ public class CPS extends CommandGroup {
     private final static Supplier<String> NotFound = () -> Utils.getMessage("", "Command not found, use /cps help for all commands", "", "commands.cps.not-found-use-help", true);
 
     public CPS() {
-        super("cps", "cps.admin", null, NotFound.get(), true);
+        super("cps", Permissions.MAIN_COMMAND, null, NotFound.get(), true);
         this.commands.put("help", new Help());
         this.commands.put("reload", new Reload());
         this.commands.put("pull", new Pull());
@@ -25,6 +26,7 @@ public class CPS extends CommandGroup {
         this.commands.put("createbackup", new CreateBackup());
         this.commands.put("loadbackup", new LoadBackup());
         this.commands.put("fix", new Fix());
+        this.commands.put("vanish", new Vanish());
     }
 
     @Override

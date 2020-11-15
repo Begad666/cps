@@ -32,7 +32,7 @@ public class RedisBungeeMessage {
         return message.serverId + integration.splitter + message.command + integration.splitter + String.join(integration.splitter, message.body);
     }
 
-    public static RedisBungeeMessage decode(String[] message, RedisBungeeIntegration integration) {
+    public static RedisBungeeMessage decode(String[] message) {
         if (message.length < 3) {
             return null;
         }
@@ -40,23 +40,12 @@ public class RedisBungeeMessage {
         String command = message[1];
         String[] body = new String[message.length - 2];
         System.arraycopy(message, 2, body, 0, message.length - 2);
-        return construct(command, body, integration);
+        return new RedisBungeeMessage(command, body, id);
     }
 
     public static RedisBungeeMessage decode(String messageString, RedisBungeeIntegration integration) {
         String[] message = messageString.split(integration.splitter);
 
-        if (message.length < 3) {
-            return null;
-        }
-        String id = message[0];
-        String command = message[1];
-        String[] body = new String[message.length - 2];
-        System.arraycopy(message, 2, body, 0, message.length - 2);
-        return construct(command, body, integration);
-    }
-
-    public static RedisBungeeMessage decode(String[] message) {
         if (message.length < 3) {
             return null;
         }

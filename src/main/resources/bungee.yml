@@ -1,5 +1,5 @@
 name: CustomProtocolSettings
-version: v4.1.4
+version: v4.1.5
 main: begad.mc.bc.plugin.cps.Core
 author: begad
 description: Advanced ServerList and Maintenance plugin
@@ -7,3 +7,4 @@ depends:
   - CoreAPI
 softdepends:
   - RedisBungee
+  - PremiumVanish

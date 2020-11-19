@@ -93,7 +93,7 @@ public class Utils {
             }
 
             for (int i = 0; i < hovermessage.length; ++i) {
-                hovermessage[i] = new PlayerInfo(list.get(i), Core.redisBungeeIntegration.isDetected() ? Core.redisBungeeIntegration.getApi().getUuidFromName(list.get(i), false) : ProxyServer.getInstance().getPlayer(list.get((i))).getUniqueId());
+                hovermessage[i] = new PlayerInfo(list.get(i), (UUID) null/* Core.redisBungeeIntegration.getPlayerUUID(list.get(i)) */);
             }
 
         } else {
@@ -119,7 +119,7 @@ public class Utils {
             }
 
             for (int i = 0; i < hovermessage.length; ++i) {
-                hovermessage[i] = new PlayerInfo(list.get(i), Core.redisBungeeIntegration.isDetected() ? Core.redisBungeeIntegration.getApi().getUuidFromName(list.get(i), false) : ProxyServer.getInstance().getPlayer(list.get((i))).getUniqueId());
+                hovermessage[i] = new PlayerInfo(list.get(i), Core.redisBungeeIntegration.getPlayerUUID(list.get(i)));
             }
 
         } else {

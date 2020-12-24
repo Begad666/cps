@@ -28,7 +28,7 @@ import org.bstats.bungeecord.MetricsLite;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -67,8 +67,8 @@ public class Core extends Plugin {
                         databaseManager.set(config.get().getString("connectionsettings.user"), config.get().getString("connectionsettings.password"));
                         databaseManager.startDataSource();
                         try (Connection connection = databaseManager.getConnection()) {
-                            try (Statement statement = connection.createStatement()) {
-                                statement.executeUpdate("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))");
+                            try (PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))")) {
+                                statement.executeUpdate();
                             } catch (SQLException exception) {
                                 getInstance().getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), exception);
                             }
@@ -223,8 +223,8 @@ public class Core extends Plugin {
                     databaseManager.set(config.get().getString("connectionsettings.user"), config.get().getString("connectionsettings.password"));
                     databaseManager.startDataSource();
                     try (Connection connection = databaseManager.getConnection()) {
-                        try (Statement statement = connection.createStatement()) {
-                            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))");
+                        try (PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cps` ( `groupId` VARCHAR(25) NOT NULL , `config` LONGTEXT NOT NULL , PRIMARY KEY (`groupId`))")) {
+                            statement.executeUpdate();
                         } catch (SQLException exception) {
                             this.getLogger().log(Level.SEVERE, Utils.getMessage("", "Couldn't execute statement", "", "database.statement-execute-error", false), exception);
                         }
